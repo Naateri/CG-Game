@@ -7,53 +7,32 @@
 #include "Controller.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Point.h"
 
 using namespace std;
 
 struct js_event e;
 int fd;
+PS3Controller* Controller1;
+Player* p;
 
-struct Point{
-	int x,y;
-	Point(int x, int y){
-		this->x = x; this->y = y;
-	}
-	void draw(){
-		glPointSize(10);
-		glBegin(GL_POINTS);
-		glVertex2f(x,y);
-		glEnd();
-	}
-};
-
-Point* particle = new Point(0,0);
+Point2D* particle = new Point2D(0,0);
 int difference = 20;
 
 void move(){
-	/*if (e.value == -32767 && e.number == 6){
-	particle->x -= difference;
-} else if (e.value == 32767 && e.number == 6){
-	particle->x += difference;
-} else if (e.value == -32767 && e.number == 7){
-	particle->y += difference;
-} else if (e.value == 32767 && e.number == 7){
-	particle->y -= difference;
-}*/
-	if (e.value > 0 && e.number == 14){
+	int val, num;
+	Controller1->read_fd();
+	val = Controller1->value; num = Controller1->number;
+	if (val > 0 && num == 14){
 		particle->y -= difference;
-	} else if (e.value >0 && e.number == 13){
+	} else if (val >0 && num == 13){
 		particle->y += difference;
-	} else if (e.value >0 && e.number == 16){
+	} else if (val >0 && num == 16){
 		particle->x += difference;
-	} else if (e.value >0 && e.number == 15){
+	} else if (val >0 && num == 15){
 		particle->x -= difference;
 	}
 	
-	///PS3:
-	//X: 0
-	//O: 1
-	//Triangle: 2
-	//Square: 3
 }
 
 void displayGizmo(){
@@ -164,14 +143,15 @@ GLvoid window_key(unsigned char key, int x, int y) {
 //
 int main(int argc, char** argv) {
 	
-	fd = open("/dev/input/js0", O_RDONLY);
+	Controller1 = new PS3Controller("/dev/input/js0");
+	Controller1->open_fd();
 	
 	//Inicializacion de la GLUT
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(600, 600); //tamaño de la ventana
 	glutInitWindowPosition(100, 100); //posicion de la ventana
-	glutCreateWindow("Lul"); //titulo de la ventana
+	glutCreateWindow("Chicken Invaders"); //titulo de la ventana
 	
 	init_GL(); //funcion de inicializacion de OpenGL
 	

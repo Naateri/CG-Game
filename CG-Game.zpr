@@ -17,7 +17,7 @@ current_source=main.cpp
 path_char=/
 [source]
 path=main.cpp
-cursor=8:18
+cursor=6:23
 open=true
 [header]
 path=Controller.h
