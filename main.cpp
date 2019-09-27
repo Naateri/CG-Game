@@ -9,6 +9,12 @@
 #include "Enemy.h"
 #include "Point.h"
 
+#define RED 0
+#define GREEN 0
+#define BLUE 0
+#define ALPHA 1
+
+
 using namespace std;
 
 struct js_event e;
@@ -18,6 +24,15 @@ Player* p;
 
 Point2D* particle = new Point2D(0,0);
 int difference = 20;
+
+
+/////SAME FRAMERATE////
+int time_execution=0;
+int timebase=0;
+////END SAME FRAMERATE///
+
+int a = 0;
+
 
 void move(){
 	int val, num;
@@ -31,6 +46,11 @@ void move(){
 		particle->x += difference;
 	} else if (val >0 && num == 15){
 		particle->x -= difference;
+	} else if (val > 0 && num == 0){
+		cout << "PEW PEW\n";
+	} else if (val == 1 && num == 1){
+		delete Controller1;
+		exit(0);
 	}
 	
 }
@@ -38,12 +58,6 @@ void move(){
 void displayGizmo(){
 	glBegin(GL_LINES);
 	glEnable(GL_PROGRAM_POINT_SIZE);
-	/*glColor3d(255,20,47);
-	glVertex2d(-300, 0);
-	glVertex2d(300, 0);
-	glColor3d(0, 0, 255);
-	glVertex2d(0, -300);
-	glVertex2d(0, 300);*/
 	glEnd();
 }
 bool r = false;
@@ -69,33 +83,42 @@ void idle(){ // AGREGAR ESTA FUNCION
 void glPaint(void) {
 	
 	//El fondo de la escena al color initial
-	glClear(GL_COLOR_BUFFER_BIT); //CAMBIO
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 	glLoadIdentity();
 	glOrtho(-300.0f,  300.0f,-300.0f, 300.0f, -1.0f, 1.0f);
+		
+	glPolygonMode(GL_FRONT, GL_LINE);
+	glPolygonMode (GL_BACK, GL_LINE);
+	//glPointSize(3);
 	
-	//dibujar quadTree (qt->draw())
-	glPointSize(3);
-	glBegin(GL_POINTS);
+	//int n = read(fd, &e, sizeof(e));
+	
+	//printf("%d %d %d %d\n", e.value, e.number, e.type, e.time);
+	
+	glBegin(GL_POLYGON_MODE);
+	
+	glColor3d(0,0,255);
+	glTranslatef(particle->x, particle->y, 0.0f);
+	glRotatef(a, 0.0f, 1.0f, 0.0f);
+	glutSolidTeapot(50);
 	
 	glEnd();
 	
-	int n = read(fd, &e, sizeof(e));
+	//particle->draw();
 	
-	printf("%d %d %d %d\n", e.value, e.number, e.type, e.time);
+	time_execution = glutGet(GLUT_ELAPSED_TIME); // recupera el tiempo ,que paso desde el incio de programa
+	float dt = float(time_execution -timebase)/1000.0;// delta time
+	timebase = time_execution;
 	
-	if (e.value == 1 && e.number == 1) exit(0);
-	
-	//cout << (int)e.value << ' ' << (int)e.number << '\n';
+	a += 10 * dt;
 	
 	move();
-	
-	particle->draw();
-	
 	//dibuja el gizmo
 	displayGizmo();
 	
 	//doble buffer, mantener esta instruccion al fin de la funcion
 	glutSwapBuffers();
+	glFlush();
 }
 
 void draw_point(int x, int y){
@@ -114,9 +137,10 @@ void draw_point(int x, int y){
 void init_GL(void) {
 	//Color del fondo de la escena
 	glClearColor(0, 0, 0, 0.0f); //(R, G, B, transparencia) en este caso un fondo negro
-	
+	glEnable(GL_COLOR_MATERIAL);
 	//modo projeccion
 	glMatrixMode(GL_PROJECTION);
+	
 	glLoadIdentity();
 }
 
@@ -138,6 +162,28 @@ GLvoid window_key(unsigned char key, int x, int y) {
 	}
 	
 }
+
+GLvoid initGL()
+{
+	GLfloat position[] = { 0.0f, 5.0f, 10.0f, 0.0 };
+	
+	//enable light : try without it
+	glLightfv(GL_LIGHT0, GL_POSITION, position);
+	glEnable(GL_LIGHTING);
+	//light 0 "on": try without it
+	glEnable(GL_LIGHT0);
+	
+	//shading model : try GL_FLAT
+	glShadeModel(GL_SMOOTH);
+	
+	glEnable(GL_DEPTH_TEST);
+	
+	//enable material : try without it
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+	
+	glClearColor(RED, GREEN, BLUE, ALPHA);
+}
 //
 //el programa principal
 //
@@ -145,15 +191,16 @@ int main(int argc, char** argv) {
 	
 	Controller1 = new PS3Controller("/dev/input/js0");
 	Controller1->open_fd();
+	cout << "Controller opened\n";
 	
 	//Inicializacion de la GLUT
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(600, 600); //tamaño de la ventana
 	glutInitWindowPosition(100, 100); //posicion de la ventana
 	glutCreateWindow("Chicken Invaders"); //titulo de la ventana
 	
-	init_GL(); //funcion de inicializacion de OpenGL
+	initGL(); //funcion de inicializacion de OpenGL
 	
 	glutDisplayFunc(glPaint);
 	glutReshapeFunc(&window_redraw);
@@ -163,7 +210,6 @@ int main(int argc, char** argv) {
 	glutMotionFunc(&OnMouseMotion);
 	glutIdleFunc(&idle);
 	
-	//qt = new quadTree();
 	glutMainLoop(); //bucle de rendering
 	//no escribir nada abajo de mainloop
 	return 0;

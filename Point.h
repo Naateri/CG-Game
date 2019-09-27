@@ -1,5 +1,6 @@
 #include <GL/glut.h>
 
+
 struct Point2D{
 	int x,y;
 	Point2D(int x, int y){
