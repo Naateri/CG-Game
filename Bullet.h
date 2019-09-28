@@ -1,22 +1,24 @@
 #ifndef BULLET_H
 #define BULLET_H
 
+#include "Point.h"
+
 class Bullet{
 public:
 	float damage;
-	float x;
-	float y;
+	Point2D* location;
+	float rotation = 0.0f;
 	
 	Bullet(){
+		location = new Point2D(0,0);
 		this->damage = 0;
-		this->x = 0;
-		this->y = 0;
+		this->location->x = 0;
+		this->location->y = 0;
 	}
 	
 	Bullet(float px, float py){
 		//this->damage = 0;
-		this->x = px;
-		this->y = py;
+		location = new Point2D(px, py);
 	}
 };
 

@@ -15,6 +15,7 @@ public:
 	Enemy1();
 	void shoot();
 	void draw();
+	void move();
 };
 
 class Enemy2: public Enemy{

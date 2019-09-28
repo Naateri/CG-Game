@@ -6,13 +6,17 @@
 #include <vector>
 #include "Controller.h"
 #include "Bullet.h"
+#include "Enemy.h"
+#include "Point.h"
 
 #define DIFFERENCE 20
+#define COLLISION 10.0f
 
 class Player{
 private:
 	PS3Controller* Joystick;
-	float x, y, z;
+	//float x, y;
+	Point2D* location;
 	float hp;
 	std::vector<Bullet*> bullets;
 	void draw_bullets();
@@ -22,5 +26,7 @@ public:
 	void shoot();
 	void draw();
 };
+
+extern std::vector<Enemy*> enemies;
 
 #endif
