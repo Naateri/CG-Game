@@ -4,9 +4,11 @@
 #include <fcntl.h> //opening device
 #include <unistd.h> //read
 #include <linux/joystick.h>
+#include <thread>
 #include "Controller.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Enemy1.h"
 #include "Point.h"
 
 #define RED 0
@@ -24,6 +26,10 @@ Player* p;
 
 Point2D* particle = new Point2D(0,0);
 int difference = 20;
+
+Enemy1* enemy1;
+
+bool player1 = false;
 
 
 /////SAME FRAMERATE////
@@ -96,9 +102,7 @@ void glPaint(void) {
 	glTranslatef(0, 0, -300.0);
 	glPushMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-	glTranslatef(particle->x, particle->y, 0.0f);
-	glColor3d(1.0f, 0.0f, 1.0f);	
-	glutSolidTeapot(10);
+	
 	
 	glPopMatrix();
 	
@@ -110,8 +114,15 @@ void glPaint(void) {
 	timebase = time_execution;
 	
 	a += 10 * dt;
-	
-	move();
+	if (!player1){
+		thread t1(&Player::move, p);
+		player1 = true;
+		t1.detach();
+	}
+	//move();
+	//p->move();
+	p->draw();
+	enemy1->draw();
 	//dibuja el gizmo
 	displayGizmo();
 	
@@ -183,6 +194,10 @@ int main(int argc, char** argv) {
 	Controller1 = new PS3Controller("/dev/input/js0");
 	Controller1->open_fd();
 	cout << "Controller opened\n";
+	
+	p = new Player(Controller1);
+	
+	enemy1 = new Enemy1;
 	
 	//Inicializacion de la GLUT
 	glutInit(&argc, argv);

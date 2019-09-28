@@ -1,5 +1,7 @@
-#include <GL/glut.h>
+#ifndef POINT_H
+#define POINT_H
 
+#include <GL/glut.h>
 
 struct Point2D{
 	int x,y;
@@ -20,3 +22,5 @@ struct Point3D{
 		this->x = x; this->y = y; this->z = z;
 	}
 };
+
+#endif
