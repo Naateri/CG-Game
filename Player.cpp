@@ -41,7 +41,9 @@ void Player::shoot(){
 
 void Player::draw_bullets(){
 	Bullet* bl;
+	Enemy* temp;
 	for(int i=0;i<bullets.size();++i){
+		bool deleted_bullet = false;
 		bullets[i]->location->y += 5;
 		bullets[i]->rotation += 15.0f;
 		//glPointSize(10);
@@ -57,25 +59,35 @@ void Player::draw_bullets(){
 		
 		//Collisions//
 		
-		for(int j = 0; j < enemies.size(); j++){
-			Enemy* temp = enemies[j];
-			if (temp->location->distance(bullets[i]->location) <= COLLISION){
-				enemies.erase(enemies.begin() + j);
-				j--;
-				delete temp;
+		int enemies_size = enemies.size();
+		
+		for(int j = 0; j < enemies_size; j++){
+			temp = enemies.at(j);
+			if (!deleted_bullet && temp->alive && temp->location->distance(bullets[i]->location) <= COLLISION){
+				temp->alive = false;
 				bl = bullets[i];
 				bullets.erase(bullets.begin() + i);
 				i--;
 				delete bl;
-				continue;
+				deleted_bullet = true;
+				//continue;
+			}
+			
+			if (!temp->alive && temp->bullets.size() <= 0){
+				enemies.erase(enemies.begin() + j);
+				j--;
+				enemies_size--;
+				delete temp;
 			}
 		}
 		
-		if (bullets[i]->location->y >= 300){
-			bl = bullets[i];
-			bullets.erase(bullets.begin() + i);
-			i--;
-			delete bl;
+		if (!deleted_bullet){
+			if (bullets[i]->location->y >= 300){
+				bl = bullets[i];
+				bullets.erase(bullets.begin() + i);
+				i--;
+				delete bl;				
+		}
 		}
 	}
 	//std::cout << "Size: " << bullets.size() << std::endl;

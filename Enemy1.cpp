@@ -20,29 +20,38 @@ void Enemy1::draw_bullets(){
 		glColor3d(255, 0, 0);
 		glVertex3f(bullets[i]->location->x,bullets[i]->location->y,0);
 		glEnd();
+		
+		if (bullets[i]->location->y <= -300.0f){
+			bl = bullets[i];
+			bullets.erase(bullets.begin() + i);
+			i--;
+			delete bl;
+		}
 	}
 }
 
 void Enemy1::draw(){
-	if (!shot){
-		this->begin = std::chrono::steady_clock::now();
-		shot = true;
-	} else {
-		this->end = std::chrono::steady_clock::now();
-		std::chrono::duration<double> elapsed_seconds = this->end - this->begin;
-		double time = elapsed_seconds.count();
+	if (alive){
+		if (!shot){
+			this->begin = std::chrono::steady_clock::now();
+			shot = true;
+		} else {
+			this->end = std::chrono::steady_clock::now();
+			std::chrono::duration<double> elapsed_seconds = this->end - this->begin;
+			double time = elapsed_seconds.count();
 		
-		if (time >= shoot_idle_time){
-			this->shot = false;
-			shoot();
-		}
+			if (time >= shoot_idle_time){
+				this->shot = false;
+				shoot();
+			}
 		//std::cout << "time: " << time << std::endl;
 	}
-	glPushMatrix();
-		glColor3d(255, 0, 0);
-		glTranslatef(location->x, location->y, 0.0f);
-		glutSolidTeapot(5);
-	glPopMatrix();
+		glPushMatrix();
+			glColor3d(255, 0, 0);
+			glTranslatef(location->x, location->y, 0.0f);
+			glutSolidTeapot(5);
+		glPopMatrix();
+	}
 	draw_bullets();
 }
 
@@ -53,7 +62,7 @@ void Enemy1::move(){
 			move_right = true;
 			location->y -= 20.0f;
 		} else {
-			location->x -= 1.0f;
+			location->x -= this->speed;
 		}
 	} else if (move_right){
 		if (location->x >= 120.0f){
@@ -61,7 +70,7 @@ void Enemy1::move(){
 			move_right = false;
 			location->y -= 20.0f;
 		} else {
-			location->x += 1.0f;
+			location->x += this->speed;
 		}
 	}
 	

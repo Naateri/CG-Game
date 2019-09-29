@@ -7,10 +7,12 @@
 #include "Enemy.h"
 #include "Bullet.h"
 
+#define ENEMY_1_SPEED 1.0f
+
 class Enemy1: public Enemy{
 private:
 	void draw_bullets();
-	std::vector<Bullet*> bullets;
+	float speed = ENEMY_1_SPEED;
 public:
 	Enemy1();
 	void shoot();

@@ -5,6 +5,7 @@
 #include <chrono>
 
 #include "Point.h"
+#include "Bullet.h"
 
 class Enemy{
 protected:
@@ -22,8 +23,12 @@ protected:
 	std::chrono::steady_clock::time_point begin_m; //movement
 	std::chrono::steady_clock::time_point end_m;
 	
+	virtual void draw_bullets() = 0;
+	
 public:
+	std::vector<Bullet*> bullets;
 	Point2D* location;
+	bool alive = true;
 	virtual void shoot() = 0;
 	virtual void draw() = 0;
 	virtual void move() = 0;
