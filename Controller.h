@@ -1,3 +1,6 @@
+#ifndef Controller_H
+#define Controller_H
+
 #include <linux/joystick.h>
 #include <fcntl.h> //opening device
 #include <unistd.h> //read
@@ -30,3 +33,5 @@ public:
 	void open_fd();
 	void read_fd();
 };
+
+#endif

@@ -13,7 +13,9 @@ PS3Controller::~PS3Controller(){
 }
 
 void PS3Controller::open_fd(){
-	fd = open(this->file_name.c_str(), O_RDONLY);
+	do{
+		fd = open(this->file_name.c_str(), O_RDONLY);
+	} while (fd <= 0);
 }
 
 void PS3Controller::read_fd(){

@@ -4,9 +4,11 @@
 #include <fcntl.h> //opening device
 #include <unistd.h> //read
 #include <linux/joystick.h>
+#include <thread>
 #include "Controller.h"
 #include "Player.h"
-#include "Enemy.h"
+//#include "Enemy.h"
+#include "Enemy1.h"
 #include "Point.h"
 
 #define RED 0
@@ -14,16 +16,26 @@
 #define BLUE 0
 #define ALPHA 1
 
+#define MAX_ENEMIES 5
+
 
 using namespace std;
 
 struct js_event e;
 int fd;
 PS3Controller* Controller1;
-Player* p;
+Player* p1;
 
 Point2D* particle = new Point2D(0,0);
 int difference = 20;
+
+Enemy* enemy1;
+
+std::chrono::steady_clock::time_point begin_t;
+std::chrono::steady_clock::time_point end_t;
+
+bool player1 = false;
+bool added_enemies = false;
 
 
 /////SAME FRAMERATE////
@@ -33,34 +45,31 @@ int timebase=0;
 
 int a = 0;
 
-
-void move(){
-	int val, num;
-	Controller1->read_fd();
-	val = Controller1->value; num = Controller1->number;
-	if (val > 0 && num == 14){
-		particle->y -= difference;
-	} else if (val >0 && num == 13){
-		particle->y += difference;
-	} else if (val >0 && num == 16){
-		particle->x += difference;
-	} else if (val >0 && num == 15){
-		particle->x -= difference;
-	} else if (val > 0 && num == 0){
-		cout << "PEW PEW\n";
-	} else if (val == 1 && num == 1){
-		delete Controller1;
-		exit(0);
-	}
-	
-}
-
 void displayGizmo(){
 	glBegin(GL_LINES);
 	glEnable(GL_PROGRAM_POINT_SIZE);
 	glEnd();
 }
 bool r = false;
+
+void add_enemies(){
+	if (enemies.size() >= MAX_ENEMIES) return;
+	
+	if (!added_enemies){
+		begin_t = std::chrono::steady_clock::now();
+		added_enemies = true;
+	}
+	end_t = std::chrono::steady_clock::now();
+	
+	std::chrono::duration<double> elapsed_seconds = end_t - begin_t;
+	double time = elapsed_seconds.count();
+	
+	if (time >= 1.0f){
+		enemy1 = new Enemy1;
+		enemies.push_back(enemy1);
+		added_enemies = false;
+	}
+}
 
 void draw_point(int x, int y);
 
@@ -96,9 +105,7 @@ void glPaint(void) {
 	glTranslatef(0, 0, -300.0);
 	glPushMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-	glTranslatef(particle->x, particle->y, 0.0f);
-	glColor3d(1.0f, 0.0f, 1.0f);	
-	glutSolidTeapot(10);
+	
 	
 	glPopMatrix();
 	
@@ -109,9 +116,22 @@ void glPaint(void) {
 	float dt = float(time_execution -timebase)/1000.0;// delta time
 	timebase = time_execution;
 	
-	a += 10 * dt;
+	add_enemies();
 	
-	move();
+	a += 10 * dt;
+	if (!player1){
+		thread t1(&Player::move, p1);
+		player1 = true;
+		t1.detach();
+	}
+	//move();
+	//p->move();
+	p1->draw();
+	for(int i = 0; i < enemies.size(); i++){
+		enemies[i]->move();
+		enemies[i]->draw();
+	}
+	//enemy1->draw();
 	//dibuja el gizmo
 	displayGizmo();
 	
@@ -183,6 +203,8 @@ int main(int argc, char** argv) {
 	Controller1 = new PS3Controller("/dev/input/js0");
 	Controller1->open_fd();
 	cout << "Controller opened\n";
+	
+	p1 = new Player(Controller1);
 	
 	//Inicializacion de la GLUT
 	glutInit(&argc, argv);
