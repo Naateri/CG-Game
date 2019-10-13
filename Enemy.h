@@ -6,6 +6,11 @@
 
 #include "Point.h"
 #include "Bullet.h"
+#include "Player.h"
+
+#define PLAYER_COLLISION 10.0f
+
+class Player;
 
 class Enemy{
 protected:
@@ -15,8 +20,10 @@ protected:
 	bool move_right = false;
 	bool move_left = true;
 	bool move_down = false;
+	bool item;
 	float shoot_idle_time;
 	float move_idle_time;
+	Player* player;
 	std::chrono::steady_clock::time_point begin;
 	std::chrono::steady_clock::time_point end;
 	

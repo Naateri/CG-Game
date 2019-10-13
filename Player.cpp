@@ -5,7 +5,16 @@ std::vector<Enemy*> enemies;
 Player::Player(PS3Controller* PS3){
 	this->Joystick = PS3;
 	location = new Point2D(0.0f, 0.0f);
-	this->hp = 100.0f;
+	this->hp = 5; //health points
+	this->begin = std::chrono::steady_clock::now();
+}
+
+void Player::add_hp(){
+	this->hp++;
+}
+
+void Player::reduce_hp(){
+	this->hp--;
 }
 
 void Player::move(){
@@ -100,4 +109,15 @@ void Player::draw(){
 		glutSolidTeapot(10);
 	glPopMatrix();
 	draw_bullets();
+}
+
+double Player::time_passed(){
+	this->end = std::chrono::steady_clock::now();
+	std::chrono::duration<double> elapsed_seconds = this->end - this->begin;
+	double time = elapsed_seconds.count();
+	return time;
+}
+
+bool Player::is_alive(){
+	return (this->hp > 0);
 }

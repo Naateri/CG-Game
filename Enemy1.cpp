@@ -1,9 +1,10 @@
 #include "Enemy1.h"
 
-Enemy1::Enemy1(){
+Enemy1::Enemy1(Player* p){
 	location = new Point2D(100.0f, 100.0f);
 	this->shoot_idle_time = 1.0f;
 	this->move_idle_time = 1.5f;
+	this->player = p;
 }
 
 void Enemy1::shoot(){
@@ -13,7 +14,9 @@ void Enemy1::shoot(){
 
 void Enemy1::draw_bullets(){
 	Bullet* bl;
+	bool hit_enemy;
 	for(int i=0;i<bullets.size();++i){
+		hit_enemy = false;
 		bullets[i]->location->y -= 3;
 		glPointSize(8);
 		glBegin(GL_POINTS);
@@ -21,7 +24,14 @@ void Enemy1::draw_bullets(){
 		glVertex3f(bullets[i]->location->x,bullets[i]->location->y,0);
 		glEnd();
 		
-		if (bullets[i]->location->y <= -300.0f){
+		if (!hit_enemy && 
+			bullets[i]->location->distance(player->location) <= PLAYER_COLLISION){
+			player->reduce_hp();
+			std::cout << "HP reduced\n";
+			hit_enemy = true;
+		}
+		
+		if (hit_enemy || bullets[i]->location->y <= -300.0f){
 			bl = bullets[i];
 			bullets.erase(bullets.begin() + i);
 			i--;

@@ -14,7 +14,7 @@ private:
 	void draw_bullets();
 	float speed = ENEMY_1_SPEED;
 public:
-	Enemy1();
+	Enemy1(Player*);
 	void shoot();
 	void draw();
 	void move();
@@ -34,4 +34,4 @@ public:
 	void draw();
 };
 
-#endif ENEMY1_H
+#endif

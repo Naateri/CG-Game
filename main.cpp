@@ -10,14 +10,15 @@
 //#include "Enemy.h"
 #include "Enemy1.h"
 #include "Point.h"
+#include "Meteors.h"
 
 #define RED 0
 #define GREEN 0
 #define BLUE 0
 #define ALPHA 1
 
-#define MAX_ENEMIES 5
-
+#define MAX_ENEMIES 10
+#define MAX_TIME 120.0f
 
 using namespace std;
 
@@ -30,13 +31,18 @@ Point2D* particle = new Point2D(0,0);
 int difference = 20;
 
 Enemy* enemy1;
+Meteor* meteor;
 
-std::chrono::steady_clock::time_point begin_t;
-std::chrono::steady_clock::time_point end_t;
+std::chrono::steady_clock::time_point begin_t; //enemies
+std::chrono::steady_clock::time_point end_t; //add enemies idle time
+
+std::chrono::steady_clock::time_point begin_meteor;
+std::chrono::steady_clock::time_point end_meteor; //add meteors idle time
 
 bool player1 = false;
 bool added_enemies = false;
-
+bool added_meteors = false;
+bool meteor_collision = false;
 
 /////SAME FRAMERATE////
 int time_execution=0;
@@ -44,6 +50,8 @@ int timebase=0;
 ////END SAME FRAMERATE///
 
 int a = 0;
+
+std::vector<Meteor*> meteors;
 
 void displayGizmo(){
 	glBegin(GL_LINES);
@@ -65,9 +73,27 @@ void add_enemies(){
 	double time = elapsed_seconds.count();
 	
 	if (time >= 1.0f){
-		enemy1 = new Enemy1;
+		enemy1 = new Enemy1(p1);
 		enemies.push_back(enemy1);
 		added_enemies = false;
+	}
+}
+
+void add_meteorite(){
+	if (!added_meteors){
+		begin_meteor = std::chrono::steady_clock::now();
+		added_meteors = true;
+	}
+	end_meteor = std::chrono::steady_clock::now();
+	
+	std::chrono::duration<double> elapsed_seconds = end_meteor - begin_meteor;
+	double time = elapsed_seconds.count();
+	
+	if (time >= 5.0f){
+		cout << "Meteorite spawning\n";
+		meteor = new Meteor(p1);
+		meteors.push_back(meteor);
+		added_meteors = false;
 	}
 }
 
@@ -117,6 +143,7 @@ void glPaint(void) {
 	timebase = time_execution;
 	
 	add_enemies();
+	add_meteorite();
 	
 	a += 10 * dt;
 	if (!player1){
@@ -131,9 +158,30 @@ void glPaint(void) {
 		enemies[i]->move();
 		enemies[i]->draw();
 	}
+	
+	for(int i = 0; i < meteors.size(); i++){
+		meteors[i]->move();
+		meteors[i]->draw();
+		if (meteors[i]->player_collision()) meteor_collision= true;
+	}
+	
 	//enemy1->draw();
 	//dibuja el gizmo
 	displayGizmo();
+	
+	if (meteor_collision){
+		enemies.clear();
+		meteors.clear();
+		p1->kill_player();
+		delete p1;
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		std::this_thread::sleep_for(std::chrono::seconds(4));
+	}
+	
+	if (p1->time_passed() >= MAX_TIME || !p1->is_alive()){
+		std::cout << "Game over\n";
+		exit(0);
+	}
 	
 	//doble buffer, mantener esta instruccion al fin de la funcion
 	glutSwapBuffers();
