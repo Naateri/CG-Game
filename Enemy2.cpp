@@ -1,0 +1,89 @@
+#include "Enemy2.h"
+
+Enemy2::Enemy2(Player *cplayer) {
+	location = new Point2D(100.0f, 100.0f);
+	this->shoot_idle_time = 1.0f;
+	this->move_idle_time = 1.5f;
+	this->cplayer = cplayer;
+}
+
+void Enemy2::shoot(){
+	Bullet* bala = new Bullet(location->x,location->y);
+	bullets.push_back(bala);
+}
+
+void Enemy2::draw_bullets(){
+	Bullet* bl;
+	for(int i=0;i<bullets.size();++i){
+		if(bullets[i]->location->y >=  TOP ){
+			if(bullets[i]->location->x > cplayer->getX()){
+				bullets[i]->location->x -= 1;
+			}
+			else{
+				bullets[i]->location->x +=1;
+			}
+		}
+		
+		bullets[i]->location->y -= 2;
+		glPushMatrix();
+		glPointSize(8);
+		glBegin(GL_POINTS);
+		glColor3d(255, 255, 0);
+		glVertex3f(bullets[i]->location->x,bullets[i]->location->y,0);
+		glEnd();
+		
+		if (bullets[i]->location->y <= -300.0f){
+			bl = bullets[i];
+			bullets.erase(bullets.begin() + i);
+			i--;
+			delete bl;
+		}
+		glPopMatrix();
+	}
+}
+
+void Enemy2::draw(){
+	if (alive){
+		if (!shot){
+			this->begin = std::chrono::steady_clock::now();
+			shot = true;
+		} else {
+			this->end = std::chrono::steady_clock::now();
+			std::chrono::duration<double> elapsed_seconds = this->end - this->begin;
+			double time = elapsed_seconds.count();
+			
+			if (time >= shoot_idle_time){
+				this->shot = false;
+				shoot();
+			}
+			//std::cout << "time: " << time << std::endl;
+		}
+		glPushMatrix();
+		glColor3d(255, 255, 0);
+		glTranslatef(location->x, location->y, 0.0f);
+		glutSolidTeapot(5);
+		glPopMatrix();
+	}
+	draw_bullets();
+}
+
+void Enemy2::move(){
+	if (move_left){
+		if (location->x <= -120.0f){
+			move_left = false;
+			move_right = true;
+			location->y -= 20.0f;
+		} else {
+			location->x -= this->speed;
+		}
+	} else if (move_right){
+		if (location->x >= 120.0f){
+			move_left = true;
+			move_right = false;
+			location->y -= 20.0f;
+		} else {
+			location->x += this->speed;
+		}
+	}
+	
+}
