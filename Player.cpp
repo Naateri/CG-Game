@@ -17,14 +17,14 @@ void Player::move(){
 	do{
 		Joystick->read_fd();
 		val = Joystick->value; num = Joystick->number;
-		if (val > 0 && num == 14){
+		if (val > 0 && num == 14){//arriba
 			this->location->y -= DIFFERENCE;
-			if(location->y < -WIDTH){/// detectar limites de la ventana
+			if(location->y < BOTTOM){/// detectar limites de la ventana
 				this->location->y += DIFFERENCE;
 			}
-		} else if (val >0 && num == 13){
+		} else if (val >0 && num == 13){//abajo
 			this->location->y += DIFFERENCE;
-			if(location->y > WIDTH){/// detectar limites de la ventana
+			if(location->y > TOP){/// detectar limites de la ventana
 				this->location->y -= DIFFERENCE;
 			}
 		} else if (val >0 && num == 16){
@@ -113,4 +113,8 @@ void Player::draw(){
 	glutSolidTeapot(10);
 	glPopMatrix();
 	draw_bullets();
+}
+
+float Player::getX(){
+	return location->x;
 }

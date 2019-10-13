@@ -14,6 +14,7 @@ void Enemy1::shoot(){
 void Enemy1::draw_bullets(){
 	Bullet* bl;
 	for(int i=0;i<bullets.size();++i){
+		glPushMatrix();
 		bullets[i]->location->y -= 3;
 		glPointSize(8);
 		glBegin(GL_POINTS);
@@ -27,6 +28,7 @@ void Enemy1::draw_bullets(){
 			i--;
 			delete bl;
 		}
+		
 	}
 }
 

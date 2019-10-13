@@ -20,13 +20,6 @@ public:
 	void move();
 };
 
-class Enemy2: public Enemy{
-	
-public:
-	void shoot();
-	void draw();
-};
-
 class Enemy3: public Enemy{
 	
 public:
@@ -34,4 +27,4 @@ public:
 	void draw();
 };
 
-#endif ENEMY1_H
+#endif 

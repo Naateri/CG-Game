@@ -9,7 +9,6 @@
 #include "Enemy.h"
 #include "Point.h"
 
-#define WIDTH 120
 #define HEIGHT 120
 #define DIFFERENCE 20
 #define COLLISION 10.0f
@@ -27,6 +26,8 @@ public:
 	void move();
 	void shoot();
 	void draw();
+	float getX();
+	float getY();
 };
 
 extern std::vector<Enemy*> enemies;
