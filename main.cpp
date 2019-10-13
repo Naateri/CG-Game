@@ -19,7 +19,7 @@
 #define BLUE 0
 #define ALPHA 1
 
-#define MAX_ENEMIES 4
+#define MAX_ENEMIES 5
 #define TYPE_ENEMIES 2
 
 using namespace std;
