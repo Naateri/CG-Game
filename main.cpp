@@ -39,6 +39,8 @@ std::chrono::steady_clock::time_point end_t; //add enemies idle time
 std::chrono::steady_clock::time_point begin_meteor;
 std::chrono::steady_clock::time_point end_meteor; //add meteors idle time
 
+std::chrono::steady_clock::time_point begin_eg; //end of game
+
 bool player1 = false;
 bool added_enemies = false;
 bool added_meteors = false;
@@ -94,6 +96,16 @@ void add_meteorite(){
 		meteor = new Meteor(p1);
 		meteors.push_back(meteor);
 		added_meteors = false;
+	}
+}
+
+void kill_player(){
+	std::chrono::steady_clock::time_point end_eg = std::chrono::steady_clock::now(); //end of game
+	std::chrono::duration<double> elapsed_seconds = end_meteor - begin_meteor;
+	double time = elapsed_seconds.count();
+	
+	if (time >= 4.0f){
+		p1->kill_player();
 	}
 }
 
@@ -172,14 +184,14 @@ void glPaint(void) {
 	if (meteor_collision){
 		enemies.clear();
 		meteors.clear();
-		p1->kill_player();
-		delete p1;
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		std::this_thread::sleep_for(std::chrono::seconds(4));
+		//delete p1;
+		begin_eg = std::chrono::steady_clock::now();
+		kill_player();
 	}
 	
 	if (p1->time_passed() >= MAX_TIME || !p1->is_alive()){
 		std::cout << "Game over\n";
+		delete p1;
 		exit(0);
 	}
 	
