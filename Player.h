@@ -10,6 +10,7 @@
 #include "Enemy.h"
 #include "Point.h"
 
+#define HEIGHT 120
 #define DIFFERENCE 20
 #define COLLISION 10.0f
 
@@ -35,6 +36,8 @@ public:
 	void draw();
 	double time_passed();
 	bool is_alive();
+	float getX();
+	float getY();
 };
 
 extern std::vector<Enemy*> enemies;

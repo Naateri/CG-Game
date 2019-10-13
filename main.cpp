@@ -5,10 +5,13 @@
 #include <unistd.h> //read
 #include <linux/joystick.h>
 #include <thread>
+#include <cstdlib>
+#include <ctime>
 #include "Controller.h"
 #include "Player.h"
 //#include "Enemy.h"
 #include "Enemy1.h"
+#include "Enemy2.h"
 #include "Point.h"
 #include "Meteors.h"
 
@@ -17,8 +20,9 @@
 #define BLUE 0
 #define ALPHA 1
 
-#define MAX_ENEMIES 10
 #define MAX_TIME 120.0f
+#define MAX_ENEMIES 5
+#define TYPE_ENEMIES 2
 
 using namespace std;
 
@@ -35,6 +39,8 @@ Meteor* meteor;
 
 std::chrono::steady_clock::time_point begin_t; //enemies
 std::chrono::steady_clock::time_point end_t; //add enemies idle time
+Enemy* enemy2;
+//Enemy* enemy3;
 
 std::chrono::steady_clock::time_point begin_meteor;
 std::chrono::steady_clock::time_point end_meteor; //add meteors idle time
@@ -72,11 +78,34 @@ void add_enemies(){
 	end_t = std::chrono::steady_clock::now();
 	
 	std::chrono::duration<double> elapsed_seconds = end_t - begin_t;
-	double time = elapsed_seconds.count();
+	double time1 = elapsed_seconds.count();
 	
-	if (time >= 1.0f){
-		enemy1 = new Enemy1(p1);
-		enemies.push_back(enemy1);
+	
+	if (time1 >= 1.0f){
+		srand(unsigned(time(0)));
+		int r = (rand() % TYPE_ENEMIES) + 1;
+		switch(r){
+			case 1 :{
+				enemy1 = new Enemy1(p1);
+				enemies.push_back(enemy1);
+				break;
+			}
+			case 2 :{
+				enemy2 = new Enemy2(p1);
+				enemies.push_back(enemy2);
+				break;
+			}
+			/*	
+			case 3 :{ ///linea 34
+				enemy1 = new Enemy1;
+				enemies.push_back(enemy1);
+				break;
+			}
+				*/
+		}
+		
+		/*enemy1 = new Enemy1;
+		enemies.push_back(enemy1);*/
 		added_enemies = false;
 	}
 }

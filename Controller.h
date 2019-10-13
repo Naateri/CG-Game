@@ -6,6 +6,9 @@
 #include <unistd.h> //read
 #include <string>
 
+#define BOTTOM -120
+#define TOP 20
+
 /**
 	PS3 controller inputs values:
 	X: 0 (0 if released, 1 if pressed)
