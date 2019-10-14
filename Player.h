@@ -14,6 +14,7 @@
 #include "DoubleBulletItem.h"
 #include "DoubleShotBulletItem.h"
 #include "SuperBombItem.h"
+#include "HealthItem.h"
 
 #define HEIGHT 120
 #define DIFFERENCE 20

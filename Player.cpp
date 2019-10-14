@@ -165,8 +165,11 @@ void Player::draw_bullets(){
 					items.push_back(power);
 				}
 					break;
-				case 4:
+				case 4:{
 					std::cout << "Drop Item 4" << std::endl;
+					HealthItem *power = new HealthItem(temp->location->x,temp->location->y);
+					items.push_back(power);
+				}
 					break;
 				case 5:{
 					std::cout << "Drop Item 5" << std::endl;
@@ -213,6 +216,10 @@ void Player::checkItemCollision(){
 			items[i]->active = false;
 			if(items[i]->id == 5){
 				this->hasBomb = true;
+			}else if(items[i]->id == 4){
+				if(this->hp<5){
+					this->hp++;
+				}
 				
 			}else{
 				this->power = items[i]->id;
@@ -234,6 +241,14 @@ void Player::checkItemCollision(){
 
 void Player::draw(){
 	this->checkItemCollision();
+	for(int i = 0; i<this->hp;i++){
+		glPushMatrix();
+			glColor3d(255, 255, 255);
+			glTranslatef(-110.0f+i*10, -110.0f, 0.0f);
+			glutSolidTeapot(4);
+		glPopMatrix();
+	}
+	
 	glPushMatrix();
 	glColor3d(255, 0, 255);
 	glTranslatef(location->x, location->y, 0.0f);
