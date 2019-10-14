@@ -295,7 +295,7 @@ GLvoid initGL()
 //
 int main(int argc, char** argv) {
 	
-	Controller1 = new PS3Controller("/dev/input/js2");
+	Controller1 = new PS3Controller("/dev/input/js0");
 	Controller1->open_fd();
 	cout << "Controller opened\n";
 	
