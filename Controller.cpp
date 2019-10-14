@@ -20,7 +20,6 @@ void PS3Controller::open_fd(){
 
 void PS3Controller::read_fd(){
 	int n = read(this->fd, &(this->e), sizeof(this->e));
-	
 	this->value = e.value;
 	this->number = e.number;
 }

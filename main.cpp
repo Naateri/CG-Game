@@ -71,6 +71,8 @@ void add_enemies(){
 	}
 }
 
+
+
 void draw_point(int x, int y);
 
 void OnMouseClick(int button, int state, int x, int y){
@@ -130,6 +132,13 @@ void glPaint(void) {
 	for(int i = 0; i < enemies.size(); i++){
 		enemies[i]->move();
 		enemies[i]->draw();
+	}
+	
+	for(int i = 0; i< items.size();i++){
+		items[i]->move();
+		items[i]->draw();
+		
+		
 	}
 	//enemy1->draw();
 	//dibuja el gizmo
@@ -200,7 +209,7 @@ GLvoid initGL()
 //
 int main(int argc, char** argv) {
 	
-	Controller1 = new PS3Controller("/dev/input/js0");
+	Controller1 = new PS3Controller("/dev/input/js2");
 	Controller1->open_fd();
 	cout << "Controller opened\n";
 	

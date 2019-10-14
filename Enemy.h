@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <chrono>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h> 
 
 #include "Point.h"
 #include "Bullet.h"
@@ -28,6 +31,7 @@ protected:
 public:
 	std::vector<Bullet*> bullets;
 	Point2D* location;
+	int drop_item;
 	bool alive = true;
 	virtual void shoot() = 0;
 	virtual void draw() = 0;

@@ -1,6 +1,9 @@
 #include "Enemy1.h"
 
 Enemy1::Enemy1(){
+	srand(time(NULL));
+	this->drop_item = rand() % 6;
+	//this->drop_item = 1;
 	location = new Point2D(100.0f, 100.0f);
 	this->shoot_idle_time = 1.0f;
 	this->move_idle_time = 1.5f;
