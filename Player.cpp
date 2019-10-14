@@ -6,28 +6,48 @@ std::vector<Item *> items;
 Player::Player(PS3Controller* PS3){
 	this->Joystick = PS3;
 	location = new Point2D(0.0f, 0.0f);
-	this->hp = 100.0f;
-	
+	this->hp = 5; //health points
+	this->begin = std::chrono::steady_clock::now();
 }
+
+void Player::add_hp(){
+	this->hp++;
+}
+
+void Player::reduce_hp(){
+	this->hp--;
+}
+
+
 
 void Player::move(){
 	int val, num;
-	//std::cout << "Waiting for read\n";
+	
 	bool end = false;
 	do{
 		Joystick->read_fd();
 		val = Joystick->value; num = Joystick->number;
-		//std::cout<<val<<" "<<num<<"\n";
-		if (val > 0 && num == 14){
+		if (val > 0 && num == 14){//arriba
 			this->location->y -= DIFFERENCE;
-		} else if (val >0 && num == 13){
+			if(location->y < BOTTOM){/// detectar limites de la ventana
+				this->location->y += DIFFERENCE;
+			}
+		} else if (val >0 && num == 13){//abajo
 			this->location->y += DIFFERENCE;
+			if(location->y > TOP){/// detectar limites de la ventana
+				this->location->y -= DIFFERENCE;
+			}
 		} else if (val >0 && num == 16){
 			this->location->x += DIFFERENCE;
+			if(location->x > HEIGHT){/// detectar limites de la ventana
+				this->location->x -= DIFFERENCE;
+			}
 		} else if (val >0 && num == 15){
 			this->location->x -= DIFFERENCE;
-		} else if (val > 0 && num == 0){
-			//std::cout << "PEW PEW\n";
+			if(location->x < -HEIGHT){/// detectar limites de la ventana
+				this->location->x += DIFFERENCE;
+			}
+		}else if (val > 0 && num == 0){
 			shoot();
 		}else if(val>0 && num == 5){
 			this->destroyAllEnemiesAndReset();
@@ -37,6 +57,7 @@ void Player::move(){
 			exit(0);
 		}
 		
+	//	std::cout<< location->x <<" - " <<location->y <<std::endl;
 		
 	} while (!end);
 }
@@ -180,7 +201,7 @@ void Player::draw_bullets(){
 			}
 		}
 	}
-	//std::cout << "Size: " << bullets.size() << std::endl;
+	
 }
 
 void Player::checkItemCollision(){
@@ -214,9 +235,24 @@ void Player::checkItemCollision(){
 void Player::draw(){
 	this->checkItemCollision();
 	glPushMatrix();
-		glColor3d(255, 0, 255);
-		glTranslatef(location->x, location->y, 0.0f);
-		glutSolidTeapot(10);
+	glColor3d(255, 0, 255);
+	glTranslatef(location->x, location->y, 0.0f);
+	glutSolidTeapot(10);
 	glPopMatrix();
 	draw_bullets();
+}
+
+double Player::time_passed(){
+	this->end = std::chrono::steady_clock::now();
+	std::chrono::duration<double> elapsed_seconds = this->end - this->begin;
+	double time = elapsed_seconds.count();
+	return time;
+}
+
+bool Player::is_alive(){
+	return (this->hp > 0);
+}
+
+float Player::getX(){
+	return location->x;
 }

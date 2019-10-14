@@ -14,17 +14,10 @@ private:
 	void draw_bullets();
 	float speed = ENEMY_1_SPEED;
 public:
-	Enemy1();
+	Enemy1(Player*);
 	void shoot();
 	void draw();
 	void move();
-};
-
-class Enemy2: public Enemy{
-	
-public:
-	void shoot();
-	void draw();
 };
 
 class Enemy3: public Enemy{
@@ -34,4 +27,4 @@ public:
 	void draw();
 };
 
-#endif ENEMY1_H
+#endif
