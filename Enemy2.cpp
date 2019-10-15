@@ -1,4 +1,4 @@
-#include "Enemy2.h"
+#include "Enemy.h"
 
 Enemy2::Enemy2(Player *cplayer) {
 	srand(time(NULL));
@@ -98,4 +98,16 @@ void Enemy2::move(){
 		}
 	}
 	
+}
+
+float Enemy2::get_hp(){
+	return hp;
+}
+
+void Enemy2::decrement_hp(){
+	hp -= ENEMY_2_DECREMENT;
+}
+
+float Enemy2::iscore(){
+	return ENEMY_2_SCORE;
 }

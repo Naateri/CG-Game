@@ -1,4 +1,4 @@
-#include "DoubleBulletItem.h"
+#include "Item.h"
 
 DoubleBulletItem::DoubleBulletItem(int x, int y) {
 	this->id = 2;
@@ -18,7 +18,7 @@ void DoubleBulletItem::draw(){
 
 void DoubleBulletItem::move(){
 	if(this->active){
-		location->y -= DOUBLEBULLET_ITEM_SPEED;
+		location->y -= DOUBLE_BULLET_ITEM_SPEED;
 	}
 	
 }

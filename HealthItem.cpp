@@ -1,4 +1,4 @@
-#include "HealthItem.h"
+#include "Item.h"
 
 HealthItem::HealthItem(int x, int y) {
 	this->id = 4;
@@ -18,6 +18,6 @@ void HealthItem::draw(){
 
 void HealthItem::move(){
 	if(this->active){
-		location->y -= HEALTHITEM_SPEED;
+		location->y -= HEALTH_ITEM_SPEED;
 	}
 }

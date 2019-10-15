@@ -10,16 +10,11 @@
 #include "Enemy.h"
 #include "Item.h"
 #include "Point.h"
-#include "DoubleShotItem.h"
-#include "DoubleBulletItem.h"
-#include "DoubleShotBulletItem.h"
-#include "SuperBombItem.h"
-#include "HealthItem.h"
 
 #define HEIGHT 120
 #define DIFFERENCE 20
 #define COLLISION 10.0f
-
+using namespace std ;
 class Enemy;
 
 class Player{
@@ -31,9 +26,12 @@ private:
 	int hp;
 	std::chrono::steady_clock::time_point begin; //time measurement
 	std::chrono::steady_clock::time_point end; //so game ends in 2 minutes
+	
 	std::vector<Bullet*> bullets;
+	
 	void draw_bullets();
 	void checkItemCollision();
+	
 public:
 	bool hasBomb = false;
 	Point2D* location;
@@ -49,6 +47,7 @@ public:
 	bool is_alive();
 	float getX();
 	float getY();
+	int score = 0;
 };
 
 extern std::vector<Enemy*> enemies;

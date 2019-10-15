@@ -21,7 +21,7 @@ void Meteor::move(){
 
 void Meteor::draw(){
 	glPushMatrix();
-		glColor3d(255, 69, 0);
+		glColor3d(0, 1, 1);
 		glTranslatef(position->x, position->y, 0.0f);
 		glRotatef(rotation, 1.0f, 1.0f, 1.0f);
 		glTranslatef(0.0f, 0.0f, 0.0f);

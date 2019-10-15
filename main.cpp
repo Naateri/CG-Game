@@ -9,9 +9,8 @@
 #include <ctime>
 #include "Controller.h"
 #include "Player.h"
-//#include "Enemy.h"
-#include "Enemy1.h"
-#include "Enemy2.h"
+#include "Enemy.h"
+
 #include "Point.h"
 #include "Meteors.h"
 
@@ -21,7 +20,7 @@
 #define ALPHA 1
 
 #define MAX_TIME 120.0f
-#define MAX_ENEMIES 5
+#define MAX_ENEMIES 3
 #define TYPE_ENEMIES 2
 
 using namespace std;
@@ -195,6 +194,9 @@ void glPaint(void) {
 	//move();
 	//p->move();
 	p1->draw();
+	
+	
+	
 	for(int i = 0; i < enemies.size(); i++){
 		enemies[i]->move();
 		enemies[i]->draw();

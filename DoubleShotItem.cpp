@@ -1,4 +1,4 @@
-#include "DoubleShotItem.h"
+#include "Item.h"
 
 DoubleShotItem::DoubleShotItem(int x, int y) {
 	this->id = 1;
@@ -19,7 +19,7 @@ void DoubleShotItem::draw(){
 
 void DoubleShotItem::move(){
 	if(this->active){
-		location->y -= DOUBLESHOT_ITEM_SPEED;
+		location->y -= DOUBLE_SHOT_ITEM_SPEED;
 	}
 	
 }

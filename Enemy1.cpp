@@ -1,4 +1,4 @@
-#include "Enemy1.h"
+#include "Enemy.h"
 
 Enemy1::Enemy1(Player* p){
 	location = new Point2D(100.0f, 100.0f);
@@ -88,4 +88,16 @@ void Enemy1::move(){
 		}
 	}
 	
+}
+
+float Enemy1::get_hp(){
+	return hp;
+}
+
+void Enemy1::decrement_hp(){
+	hp -= ENEMY_1_DECREMENT;
+}
+
+float Enemy1::iscore(){
+	return ENEMY_1_SCORE;
 }

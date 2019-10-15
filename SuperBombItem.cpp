@@ -1,4 +1,4 @@
-#include "SuperBombItem.h"
+#include "Item.h"
 
 SuperBombItem::SuperBombItem(int x, int y) {
 	this->id = 5;
@@ -18,6 +18,6 @@ void SuperBombItem::draw(){
 
 void SuperBombItem::move(){
 	if(this->active){
-		location->y -= SUPERBOMB_SPEED;
+		location->y -= SUPER_BOMB_SPEED;
 	}
 }

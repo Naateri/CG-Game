@@ -5,6 +5,7 @@ std::vector<Item *> items;
 
 Player::Player(PS3Controller* PS3){
 	this->Joystick = PS3;
+	this->score = 0;
 	location = new Point2D(0.0f, 0.0f);
 	this->hp = 5; //health points
 	this->begin = std::chrono::steady_clock::now();
@@ -134,65 +135,74 @@ void Player::draw_bullets(){
 		int enemies_size = enemies.size();
 		for(int j = 0; j < enemies_size; j++){
 			temp = enemies.at(j);
+			
 			if (!deleted_bullet && temp->alive && temp->location->distance(bullets[i]->location) <= this->collision){
-				temp->alive = false;
-				bl = bullets[i];
-				bullets.erase(bullets.begin() + i);
-				i--;
-				delete bl;
-				deleted_bullet = true;
-				//continue;
+				temp->decrement_hp();
 				
-				//dropear un Item
-				switch(temp->drop_item)
-				{
-				case 1:
-				{
-					std::cout << "Drop Item 1" << std::endl;
-					DoubleShotItem *power = new DoubleShotItem(temp->location->x,temp->location->y);
-					items.push_back(power);
-				}
-					break;
-				case 2:{
-					std::cout << "Drop Item 2" << std::endl;
-					DoubleBulletItem *power = new DoubleBulletItem(temp->location->x,temp->location->y);
-					items.push_back(power);
-				}
-					break;
-				case 3:{
-					std::cout << "Drop Item 3" << std::endl;
-					DoubleShotBulletItem *power = new DoubleShotBulletItem(temp->location->x,temp->location->y);
-					items.push_back(power);
-				}
-					break;
-				case 4:{
-					std::cout << "Drop Item 4" << std::endl;
-					HealthItem *power = new HealthItem(temp->location->x,temp->location->y);
-					items.push_back(power);
-				}
-					break;
-				case 5:{
-					std::cout << "Drop Item 5" << std::endl;
-					if(!this->hasBomb){
-						SuperBombItem *power = new SuperBombItem(temp->location->x,temp->location->y);
+				if(temp->get_hp() <= 0){
+					temp->alive = false;
+					
+					bl = bullets[i];
+					bullets.erase(bullets.begin() + i);
+					i--;
+					delete bl;
+					deleted_bullet = true;
+					
+					//dropear un Item
+					switch(temp->drop_item){
+					case 1:{
+						std::cout << "Drop Item 1" << std::endl;
+						DoubleShotItem *power = new DoubleShotItem(temp->location->x,temp->location->y);
 						items.push_back(power);
+						break;
 					}
 					
-				}
-					break;
-				default:
-					std::cout << "Drop Nothing" << std::endl;
+					case 2:{
+						std::cout << "Drop Item 2" << std::endl;
+						DoubleBulletItem *power = new DoubleBulletItem(temp->location->x,temp->location->y);
+						items.push_back(power);
+						break;
+					}
+						
+					case 3:{
+						std::cout << "Drop Item 3" << std::endl;
+						DoubleShotBulletItem *power = new DoubleShotBulletItem(temp->location->x,temp->location->y);
+						items.push_back(power);
+						break;
+					}
+						
+					case 4:{
+						std::cout << "Drop Item 4" << std::endl;
+						HealthItem *power = new HealthItem(temp->location->x,temp->location->y);
+						items.push_back(power);
+						break;
+					}
+						
+					case 5:{
+						std::cout << "Drop Item 5" << std::endl;
+						if(!this->hasBomb){
+							SuperBombItem *power = new SuperBombItem(temp->location->x,temp->location->y);
+							items.push_back(power);
+						}
+						break;
+					}
+						
+					default:
+						std::cout << "Drop Nothing" << std::endl;
+					}
 				}
 				
 			}
-			
+
 			if (!temp->alive && temp->bullets.size() <= 0){
-				
+				score += temp->iscore(); // increment score
+				//cout<<"MATADO: "<<score<<endl;
 				enemies.erase(enemies.begin() + j);
 				j--;
 				enemies_size--;
 				delete temp;
 			}
+		
 		}
 		
 		if (!deleted_bullet){
@@ -239,8 +249,18 @@ void Player::checkItemCollision(){
 	}
 }
 
+void drawBitmapText(string s,float x,float y,float z) {  
+	glRasterPos3f(x, y,z);
+	
+	for (int i=0; i<s.size(); i++) 
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, s[i]);
+	}
+}
+
 void Player::draw(){
 	this->checkItemCollision();
+	/// Vidas
 	for(int i = 0; i<this->hp;i++){
 		glPushMatrix();
 			glColor3d(255, 255, 255);
@@ -248,12 +268,20 @@ void Player::draw(){
 			glutSolidTeapot(4);
 		glPopMatrix();
 	}
+	 
+	/// Score
+	glPushMatrix();
+	string s = "Score: " + to_string(score);
+	drawBitmapText(s,80,-110.0f,0);
+	glPopMatrix();
 	
+	/// Jugador
 	glPushMatrix();
 	glColor3d(255, 0, 255);
 	glTranslatef(location->x, location->y, 0.0f);
 	glutSolidTeapot(10);
 	glPopMatrix();
+	
 	draw_bullets();
 }
 
