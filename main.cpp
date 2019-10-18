@@ -21,7 +21,7 @@
 
 #define MAX_TIME 120.0f
 #define MAX_ENEMIES 3
-#define TYPE_ENEMIES 2
+#define TYPE_ENEMIES 3
 
 using namespace std;
 
@@ -39,7 +39,7 @@ Meteor* meteor;
 std::chrono::steady_clock::time_point begin_t; //enemies
 std::chrono::steady_clock::time_point end_t; //add enemies idle time
 Enemy* enemy2;
-//Enemy* enemy3;
+Enemy* enemy3;
 
 std::chrono::steady_clock::time_point begin_meteor;
 std::chrono::steady_clock::time_point end_meteor; //add meteors idle time
@@ -94,13 +94,13 @@ void add_enemies(){
 				enemies.push_back(enemy2);
 				break;
 			}
-			/*	
+				
 			case 3 :{ ///linea 34
-				enemy1 = new Enemy1;
-				enemies.push_back(enemy1);
+				enemy3 = new Enemy3(p1);
+				enemies.push_back(enemy3);
 				break;
 			}
-				*/
+				
 		}
 		
 		/*enemy1 = new Enemy1;
@@ -297,7 +297,7 @@ GLvoid initGL()
 //
 int main(int argc, char** argv) {
 	
-	Controller1 = new PS3Controller("/dev/input/js0");
+	Controller1 = new PS3Controller("/dev/input/js2");
 	Controller1->open_fd();
 	cout << "Controller opened\n";
 	
