@@ -34,31 +34,22 @@ void PS3Controller::init(){
 	joy_button.resize(num_of_buttons,0);
 	bool flag = false;
 	
-	
-	
 	read(this->fd, &(this->e), sizeof(js_event));
 	
 	switch (e.type & ~JS_EVENT_INIT){
 		case JS_EVENT_AXIS:{
-			if((int)e.number>=joy_axis.size())  {cerr<<"err:"<<(int)e.number<<endl;}
-			else{
-				
-				int p = (int)e.number;
-				joy_axis[p]= e.value;
-				this->isButton = false;
-			}
+			int p = (int)e.number;
+			joy_axis[p]= e.value;
+			this->isButton = false;
 			break;
 		}
 		case JS_EVENT_BUTTON:{
-				if((int)e.number>=joy_button.size())  {cerr<<"err:"<<(int)e.number<<endl;}
-				else{
-					int p = (int)e.number;
-					joy_button[p]= e.value;
-					this->isButton = true;
-					this->num_button = p;
-				}
-				break;
-			}
+			int p = (int)e.number;
+			joy_button[p]= e.value;
+			this->isButton = true;
+			this->num_button = p;
+			break;
+		}
 	}
 	
 	
@@ -71,8 +62,9 @@ pair<int,int> PS3Controller::controls(){
 	}
 	else{
 		res.first = joy_axis[0]/10000;
+		
 		res.second = joy_axis[1]/10000;	
-			
+		
 	}
 	return res;
 }

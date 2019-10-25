@@ -36,21 +36,22 @@ void Player::move(){
 		pair<int,int> control = Joystick->controls();
 		
 		if(Joystick->isButton){
-			
 			val = Joystick->value; 
 			num = control.first;
 			cout<<"VALOR"<<val<<"   NUM "<<num<<endl;
-			if ( num == 0){
+			if (num == 0){
 				shoot();
 			}else if(val>0 && num == 5){
 				this->destroyAllEnemiesAndReset();
-			} else if (val == 1 && num == 1){
+			} else if (val==1 && num == 1 ){
+				//cout<<"Algo"<<endl;
 				delete Joystick;
 				end = true;
+				
 				exit(0);
 			}
 			
-			
+		
 			
 			
 		}
@@ -74,8 +75,6 @@ void Player::move(){
 			
 			if(location->x > HEIGHT){/// detectar limites de la ventana
 				this->location->x = HEIGHT;
-				
-					
 			}
 			if(location->x < -HEIGHT){/// detectar limites de la ventana
 				this->location->x = -HEIGHT;
@@ -340,6 +339,15 @@ void Player::draw(){
 	glTranslatef(location->x, location->y, 0.0f);
 	glutSolidTeapot(10);
 	glPopMatrix();
+	
+	///Bomba
+	if(hasBomb){
+		glPushMatrix();
+		glColor3d(1,0,0);
+		string b = "Bomb";
+		drawBitmapText(b,0,-110.0f,0);
+		glPopMatrix();
+	}
 	
 	draw_bullets();
 }
