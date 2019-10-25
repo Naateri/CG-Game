@@ -20,7 +20,7 @@
 #define ALPHA 1
 
 #define MAX_TIME 120.0f
-#define MAX_ENEMIES 3
+#define MAX_ENEMIES 5
 #define TYPE_ENEMIES 2
 
 using namespace std;
@@ -53,7 +53,8 @@ bool meteor_collision = false;
 
 /////SAME FRAMERATE////
 int time_execution=0;
-int timebase=0;
+float timebase_b=0, timenase_e = 0;
+float dt;
 ////END SAME FRAMERATE///
 
 int a = 0;
@@ -82,29 +83,18 @@ void add_enemies(){
 	
 	if (time1 >= 1.0f){
 		srand(unsigned(time(0)));
-		int r = (rand() % TYPE_ENEMIES) + 1;
-		switch(r){
-			case 1 :{
-				enemy1 = new Enemy1(p1);
-				enemies.push_back(enemy1);
-				break;
-			}
-			case 2 :{
-				enemy2 = new Enemy2(p1);
-				enemies.push_back(enemy2);
-				break;
-			}
-			/*	
-			case 3 :{ ///linea 34
-				enemy1 = new Enemy1;
-				enemies.push_back(enemy1);
-				break;
-			}
-				*/
+		int r = (rand() % 100) + 0;
+		
+		if (r >= 0 && r < 60){
+			enemy1 = new Enemy1(p1);
+			enemies.push_back(enemy1);
+		} else if (r < 90){
+			enemy2 = new Enemy2(p1);
+			enemies.push_back(enemy2);
+		} else {
+			cout << "Enemy3\n";
 		}
 		
-		/*enemy1 = new Enemy1;
-		enemies.push_back(enemy1);*/
 		added_enemies = false;
 	}
 }
@@ -119,7 +109,7 @@ void add_meteorite(){
 	std::chrono::duration<double> elapsed_seconds = end_meteor - begin_meteor;
 	double time = elapsed_seconds.count();
 	
-	if (time >= 5.0f){
+	if (time >= 10.0f){
 		cout << "Meteorite spawning\n";
 		meteor = new Meteor(p1);
 		meteors.push_back(meteor);
@@ -179,8 +169,8 @@ void glPaint(void) {
 	//particle->draw();
 	
 	time_execution = glutGet(GLUT_ELAPSED_TIME); // recupera el tiempo ,que paso desde el incio de programa
-	float dt = float(time_execution -timebase)/1000.0;// delta time
-	timebase = time_execution;
+	//float dt = float(time_execution -timebase)/1000.0;// delta time
+	//timebase = time_execution;
 	
 	add_enemies();
 	add_meteorite();
