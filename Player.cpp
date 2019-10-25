@@ -25,9 +25,68 @@ void Player::move(){
 	int val, num;
 	
 	bool end = false;
-	do{
-		Joystick->read_fd();
-		val = Joystick->value; num = Joystick->number;
+	Joystick->read_fd();
+	while (!end){
+		
+		
+		
+		
+		
+		Joystick->init();
+		pair<int,int> control = Joystick->controls();
+		
+		if(Joystick->isButton){
+			
+			val = Joystick->value; 
+			num = control.first;
+			cout<<"VALOR"<<val<<"   NUM "<<num<<endl;
+			if ( num == 0){
+				shoot();
+			}else if(val>0 && num == 5){
+				this->destroyAllEnemiesAndReset();
+			} else if (val == 1 && num == 1){
+				delete Joystick;
+				end = true;
+				exit(0);
+			}
+			
+			
+			
+			
+		}
+		else{
+		
+		
+			cout<<"Controles: "<<control.first<<"   "<<control.second<<endl;
+		
+			this->location->x += control.first * DIFFERENCE;
+			this->location->y -= control.second * DIFFERENCE;
+			cout<<"X esta en :"<<this->location->x<<endl;
+			cout<<"Y esta en :"<<this->location->y<<endl;
+			
+			
+			if(location->y > TOP){/// detectar limites de la ventana
+				this->location->y = TOP;
+			}
+			if(location->y < BOTTOM){/// detectar limites de la ventana
+				this->location->y = BOTTOM;
+			}
+			
+			if(location->x > HEIGHT){/// detectar limites de la ventana
+				this->location->x = HEIGHT;
+				
+					
+			}
+			if(location->x < -HEIGHT){/// detectar limites de la ventana
+				this->location->x = -HEIGHT;
+				
+			}
+			
+			}
+		
+		
+		/*
+		
 		if (val > 0 && num == 14){//arriba
 			this->location->y -= DIFFERENCE;
 			if(location->y < BOTTOM){/// detectar limites de la ventana
@@ -56,11 +115,11 @@ void Player::move(){
 			delete Joystick;
 			end = true;
 			exit(0);
-		}
+		}*/
 		
 	//	std::cout<< location->x <<" - " <<location->y <<std::endl;
 		
-	} while (!end);
+	};
 }
 
 void Player::destroyAllEnemiesAndReset(){

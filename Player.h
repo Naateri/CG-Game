@@ -12,7 +12,7 @@
 #include "Point.h"
 
 #define HEIGHT 120
-#define DIFFERENCE 20
+#define DIFFERENCE 1
 #define COLLISION 10.0f
 using namespace std ;
 class Enemy;
