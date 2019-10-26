@@ -41,14 +41,17 @@ void Player::move(){
 			cout<<"VALOR"<<val<<"   NUM "<<num<<endl;
 			if (num == 0){
 				shoot();
-			}else if(val>0 && num == 5){
+			}else if(num == 5){
+				cout<<"BOMBA"<<endl;
 				this->destroyAllEnemiesAndReset();
-			} else if (val==1 && num == 1 ){
+			} else if (num == 1 ){
 				//cout<<"Algo"<<endl;
 				delete Joystick;
 				end = true;
-				
 				exit(0);
+			}
+			else if(num == -1){
+				cout<<"gg"<<endl;
 			}
 			
 		

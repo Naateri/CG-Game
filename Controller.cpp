@@ -45,11 +45,13 @@ void PS3Controller::init(){
 		}
 		case JS_EVENT_BUTTON:{
 			int p = (int)e.number;
+			this->value = e.value;
 			joy_button[p]= e.value;
 			this->isButton = true;
 			this->num_button = p;
 			break;
 		}
+
 	}
 	
 	
@@ -58,20 +60,24 @@ void PS3Controller::init(){
 pair<float,float> PS3Controller::controls(){
 	pair<float,float> res;
 	if(this->isButton){
+		cout<<"VALUE:"<<value<<"PLS"<<endl;
+		
+		if(joy_button[num_button] && value == 1){
+			
 			res.first = num_button;
+		}
+		else{
+			res.first = -1;
+		}
 	}
 	else{
-		cout<<"X pe: "<<joy_axis[1]<<endl;
 		if(joy_axis[0] == 0 && joy_axis[1] == 0 ){
 			res.first = 0;
 			res.second = 0;
 		}
 		else{
-		
 			float mag = sqrt(pow(joy_axis[0],2)+pow(joy_axis[1],2));
-			
 			res.first = joy_axis[0]/mag;
-			
 			res.second = joy_axis[1]/mag;	
 		}
 	}
