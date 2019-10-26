@@ -55,16 +55,25 @@ void PS3Controller::init(){
 	
 }
 
-pair<int,int> PS3Controller::controls(){
-	pair<int,int> res;
+pair<float,float> PS3Controller::controls(){
+	pair<float,float> res;
 	if(this->isButton){
 			res.first = num_button;
 	}
 	else{
-		res.first = joy_axis[0]/10000;
+		cout<<"X pe: "<<joy_axis[1]<<endl;
+		if(joy_axis[0] == 0 && joy_axis[1] == 0 ){
+			res.first = 0;
+			res.second = 0;
+		}
+		else{
 		
-		res.second = joy_axis[1]/10000;	
-		
+			float mag = sqrt(pow(joy_axis[0],2)+pow(joy_axis[1],2));
+			
+			res.first = joy_axis[0]/mag;
+			
+			res.second = joy_axis[1]/mag;	
+		}
 	}
 	return res;
 }

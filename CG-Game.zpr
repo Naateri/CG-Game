@@ -15,7 +15,7 @@ tab_width=4
 tab_use_spaces=0
 explorer_path=.
 inherits_from=
-current_source=main.cpp
+current_source=Player.h
 path_char=/
 [source]
 path=main.cpp
@@ -23,11 +23,11 @@ cursor=22:21
 open=true
 [source]
 path=Controller.cpp
-cursor=44:4
+cursor=66:30
 open=true
 [source]
 path=Player.cpp
-cursor=27:21
+cursor=65:51
 open=true
 [source]
 path=Enemy1.cpp
@@ -61,11 +61,11 @@ path=DoubleBulletItem.cpp
 cursor=0:0
 [header]
 path=Controller.h
-cursor=41:19
+cursor=9:16
 open=true
 [header]
 path=Player.h
-cursor=14:20
+cursor=14:21
 open=true
 [header]
 path=Enemy.h

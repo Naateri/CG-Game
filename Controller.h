@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <math.h>
 #define BOTTOM -120
 #define TOP 20
 
@@ -44,7 +45,7 @@ public:
 	void init();
 	vector<int> joy_axis;
 	vector<char> joy_button;
-	pair<int,int> controls();
+	pair<float,float> controls();
 };
 
 #endif

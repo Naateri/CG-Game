@@ -33,7 +33,7 @@ void Player::move(){
 		
 		
 		Joystick->init();
-		pair<int,int> control = Joystick->controls();
+		pair<float,float> control = Joystick->controls();
 		
 		if(Joystick->isButton){
 			val = Joystick->value; 
@@ -60,7 +60,9 @@ void Player::move(){
 		
 			cout<<"Controles: "<<control.first<<"   "<<control.second<<endl;
 		
+			//this->location->x += control.first * DIFFERENCE;
 			this->location->x += control.first * DIFFERENCE;
+			//this->location->y -= control.second * DIFFERENCE;
 			this->location->y -= control.second * DIFFERENCE;
 			cout<<"X esta en :"<<this->location->x<<endl;
 			cout<<"Y esta en :"<<this->location->y<<endl;
