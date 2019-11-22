@@ -42,8 +42,12 @@ void Player::move(){
 			if (num == 0){
 				shoot();
 			}else if(num == 5){
+				
 				cout<<"BOMBA"<<endl;
+				
 				this->destroyAllEnemiesAndReset();
+				
+				
 			} else if (num == 1 ){
 				//cout<<"Algo"<<endl;
 				delete Joystick;
@@ -133,6 +137,7 @@ void Player::destroyAllEnemiesAndReset(){
 		enemies.clear();
 		items.clear();
 		bullets.clear();
+		hasBomb = false;
 	}
 }
 
