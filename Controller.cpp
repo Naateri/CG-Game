@@ -23,3 +23,68 @@ void PS3Controller::read_fd(){
 	this->value = e.value;
 	this->number = e.number;
 }
+
+
+void PS3Controller::init(){
+	
+	ioctl(this->fd, JSIOCGAXES, &num_of_axis);
+	ioctl(this->fd, JSIOCGBUTTONS, &num_of_buttons);
+	
+	joy_axis.resize(num_of_axis,0);
+	joy_button.resize(num_of_buttons,0);
+	bool flag = false;
+	
+	read(this->fd, &(this->e), sizeof(js_event));
+	
+	switch (e.type & ~JS_EVENT_INIT){
+		case JS_EVENT_AXIS:{
+			int p = (int)e.number;
+			joy_axis[p]= e.value;
+			this->isButton = false;
+			break;
+		}
+		case JS_EVENT_BUTTON:{
+			int p = (int)e.number;
+			this->value = e.value;
+			joy_button[p]= e.value;
+			this->isButton = true;
+			this->num_button = p;
+			break;
+		}
+
+	}
+	
+	
+}
+
+pair<float,float> PS3Controller::controls(){
+	pair<float,float> res;
+	if(this->isButton){
+		cout<<"VALUE:"<<value<<"PLS"<<endl;
+		
+		if(joy_button[num_button] && value == 1){
+			
+			res.first = num_button;
+		}
+		else{
+			res.first = -1;
+		}
+	}
+	else{
+		if(joy_axis[0] == 0 && joy_axis[1] == 0 ){
+			res.first = 0;
+			res.second = 0;
+		}
+		else{
+			float mag = sqrt(pow(joy_axis[0],2)+pow(joy_axis[1],2));
+			res.first = joy_axis[0]/mag;
+			res.second = joy_axis[1]/mag;	
+		}
+	}
+	return res;
+}
+
+
+
+
+;

@@ -20,8 +20,8 @@
 #define ALPHA 1
 
 #define MAX_TIME 120.0f
-#define MAX_ENEMIES 3
-#define TYPE_ENEMIES 3
+#define MAX_ENEMIES 2
+#define TYPE_ENEMIES 2
 
 using namespace std;
 

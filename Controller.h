@@ -5,10 +5,13 @@
 #include <fcntl.h> //opening device
 #include <unistd.h> //read
 #include <string>
-
+#include <vector>
+#include <iostream>
+#include <math.h>
 #define BOTTOM -120
 #define TOP 20
 
+using namespace std;
 /**
 	PS3 controller inputs values:
 	X: 0 (0 if released, 1 if pressed)
@@ -29,12 +32,20 @@ private:
 	int fd;
 	void close_fd();
 public:
+	bool isButton ;
 	int value; //value of button read
 	int number; //button pressed
 	PS3Controller(std::string);
 	~PS3Controller(); //destructor
 	void open_fd();
 	void read_fd();
+	int num_of_axis=0;
+	int num_of_buttons=0;
+	int num_button ;
+	void init();
+	vector<int> joy_axis;
+	vector<char> joy_button;
+	pair<float,float> controls();
 };
 
 #endif
