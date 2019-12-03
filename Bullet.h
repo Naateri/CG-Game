@@ -8,6 +8,9 @@ public:
 	float damage;
 	Point2D* location;
 	float rotation = 0.0f;
+	GLfloat m;
+	GLfloat n;
+	bool direction;
 	
 	Bullet(){
 		location = new Point2D(0,0);

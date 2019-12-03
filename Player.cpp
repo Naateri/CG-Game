@@ -299,3 +299,7 @@ bool Player::is_alive(){
 float Player::getX(){
 	return location->x;
 }
+
+float Player::getY(){
+	return location->y;
+}
