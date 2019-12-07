@@ -10,7 +10,7 @@
 #include "Enemy.h"
 #include "Item.h"
 #include "Point.h"
-
+#include "TextureManager.h"
 #define HEIGHT 120
 #define DIFFERENCE 2
 #define COLLISION 10.0f
@@ -21,6 +21,7 @@ class Player{
 private:
 	int power;
 	PS3Controller* Joystick;
+	
 	//float x, y;
 	float collision = 10.0f;
 	int hp;
@@ -48,6 +49,17 @@ public:
 	float getX();
 	float getY();
 	int score = 0;
+	
+	///Texturas
+	void draw_health(int i);
+	void draw_player(int i);
+	void loadTexture();
+	int time1 = 0;
+	int timebase = 0;
+	int anim = 0;
+	int i=0;
+	GLint sprites[8];
+	
 };
 
 extern std::vector<Enemy*> enemies;

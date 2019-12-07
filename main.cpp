@@ -10,7 +10,7 @@
 #include "Controller.h"
 #include "Player.h"
 #include "Enemy.h"
-
+#include "TextureManager.h"
 #include "Point.h"
 #include "Meteors.h"
 
@@ -20,7 +20,7 @@
 #define ALPHA 1
 
 #define MAX_TIME 120.0f
-#define MAX_ENEMIES 2
+#define MAX_ENEMIES 5
 #define TYPE_ENEMIES 2
 
 using namespace std;
@@ -39,7 +39,7 @@ Meteor* meteor;
 std::chrono::steady_clock::time_point begin_t; //enemies
 std::chrono::steady_clock::time_point end_t; //add enemies idle time
 Enemy* enemy2;
-//Enemy* enemy3;
+Enemy* enemy3;
 
 std::chrono::steady_clock::time_point begin_meteor;
 std::chrono::steady_clock::time_point end_meteor; //add meteors idle time
@@ -59,6 +59,12 @@ int timebase=0;
 int a = 0;
 
 std::vector<Meteor*> meteors;
+
+
+/// Texturas
+
+
+
 
 void displayGizmo(){
 	glBegin(GL_LINES);
@@ -94,13 +100,13 @@ void add_enemies(){
 				enemies.push_back(enemy2);
 				break;
 			}
-			/*	
-			case 3 :{ ///linea 34
-				enemy1 = new Enemy1;
-				enemies.push_back(enemy1);
+				
+			case 3 :{ 
+				enemy3 = new Enemy3(p1);
+				enemies.push_back(enemy3);
 				break;
 			}
-				*/
+				
 		}
 		
 		/*enemy1 = new Enemy1;
@@ -154,30 +160,32 @@ void idle(){ // AGREGAR ESTA FUNCION
 	glutPostRedisplay();
 }
 
+
 //funcion llamada a cada imagen
 void glPaint(void) {
-	
+
 	//El fondo de la escena al color initial
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//funcion de transparencia
+	glEnable(GL_BLEND);//utilizar transparencia
+	//glEnable(GL_TEXTURE_2D);
 	glLoadIdentity();
+
 	//glOrtho(-300.0f,  300.0f,-300.0f, 300.0f, -1.0f, 1.0f);
-	/// Esto fue lo que cambié jijiji
-	gluPerspective(45.0, 1.0, 1.0, 500.0);
 	
+	gluPerspective(45.0, 1.0, 1.0, 500.0);
+	glTranslatef(0, 0, -300.0);
+/*
 	
 	glPolygonMode(GL_FRONT, GL_LINE);
 	glPolygonMode (GL_BACK, GL_LINE);
 	
-	glTranslatef(0, 0, -300.0);
+	
 	glPushMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 	
-	
 	glPopMatrix();
-	
-	
-	//particle->draw();
-	
+	*/
 	time_execution = glutGet(GLUT_ELAPSED_TIME); // recupera el tiempo ,que paso desde el incio de programa
 	float dt = float(time_execution -timebase)/1000.0;// delta time
 	timebase = time_execution;
@@ -247,20 +255,6 @@ void draw_point(int x, int y){
 	glutSwapBuffers();
 }
 
-//
-//inicializacion de OpenGL
-//
-void init_GL(void) {
-	//Color del fondo de la escena
-	//glClearColor(0, 0, 0, 0.0f); //(R, G, B, transparencia) en este caso un fondo negro
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glEnable(GL_COLOR_MATERIAL);
-	//modo projeccion
-	//glMatrixMode(GL_PROJECTION);
-	
-	glLoadIdentity();
-	glutSwapBuffers();
-}
 
 //en el caso que la ventana cambie de tamaño
 GLvoid window_redraw(GLsizei width, GLsizei height) {
@@ -279,20 +273,25 @@ GLvoid window_key(unsigned char key, int x, int y) {
 		break;
 	}
 	
+
 }
 
 GLvoid initGL()
 {
-	GLfloat position[] = { 0.0f, 5.0f, 10.0f, 0.0 };
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	
 	glEnable(GL_DEPTH_TEST);
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-
+	
 }
+
+
+
+
 //
+
 //el programa principal
 //
 int main(int argc, char** argv) {
@@ -305,12 +304,20 @@ int main(int argc, char** argv) {
 	
 	//Inicializacion de la GLUT
 	glutInit(&argc, argv);
+	
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(800, 800); //tamaño de la ventana
 	glutInitWindowPosition(100, 100); //posicion de la ventana
 	glutCreateWindow("Chicken Invaders"); //titulo de la ventana
 	
+
+	
 	initGL(); //funcion de inicializacion de OpenGL
+
+	p1->loadTexture();
+
+	
+	
 	
 	glutDisplayFunc(glPaint);
 	glutReshapeFunc(&window_redraw);

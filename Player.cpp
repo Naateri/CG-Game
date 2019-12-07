@@ -285,6 +285,18 @@ void Player::draw_bullets(){
 	
 }
 
+void Player::loadTexture(){
+	for(int i=1;i<9;++i){
+		string name = "Health/frame-" + to_string(i) + ".png";
+		cout<<name<<endl;
+		char const* name1 = name.c_str();
+		sprites[i] = TextureManager::Inst()->LoadTexture(name1, GL_BGRA_EXT, GL_RGBA);
+		
+	}
+	
+}
+
+
 void Player::checkItemCollision(){
 	for(int i = 0;i<items.size();i++){
 		//std::cout<<"distancia item "<<i<<this->location->distance(items[i]->location)<<std::endl;
@@ -326,22 +338,102 @@ void drawBitmapText(string s,float x,float y,float z) {
 	}
 }
 
-void Player::draw(){
-	this->checkItemCollision();
-	/// Vidas
-	for(int i = 0; i<this->hp;i++){
-		glPushMatrix();
-			glColor3d(255, 255, 255);
-			glTranslatef(-110.0f+i*10, -110.0f, 0.0f);
-			glutSolidTeapot(4);
-		glPopMatrix();
+void Player::draw_health(int i){
+	i = i % 8; /// son 8 sprites de salud
+	if(i==0){
+		i+=1;
 	}
-	 
+
+	cout<<"I " <<i<<endl;
+	float h = 494/410*4;
+	float w = 443/410*4;
+	
+	glPushMatrix();
+	
+	glBindTexture(GL_TEXTURE_2D, sprites[i]);
+	glBegin(GL_QUADS);
+	glColor3f(1.0,1.0,1.0);
+	glTexCoord2f(1,0);//coordenadas de textura
+	glVertex3d(-w, -h, 0);
+	
+	glTexCoord2f(1,1);
+	glVertex3d(-w, h, 0);
+	
+	glTexCoord2f(0,1);
+	glVertex3d(w, h, 0);
+	
+	glTexCoord2f(0,0);
+	glVertex3d(w, -h, 0);
+	glEnd();
+	glPopMatrix();
+}
+
+
+void Player::draw_player(int i){
+	cout<<"I " <<i<<endl;
+	float h = 494/410*4;
+	float w = 443/410*4;
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, sprites[i]);
+	glBegin(GL_QUADS);
+	glColor3f(1.0,1.0,1.0);
+	glTexCoord2f(1,0);//coordenadas de textura
+	glVertex3d(-w, -h, 0);
+	
+	glTexCoord2f(1,1);
+	glVertex3d(-w, h, 0);
+	
+	glTexCoord2f(0,1);
+	glVertex3d(w, h, 0);
+	
+	glTexCoord2f(0,0);
+	glVertex3d(w, -h, 0);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	
+}
+
+
+void Player::draw(){
+	
+	
+	time1 = glutGet(GLUT_ELAPSED_TIME); // recupera el tiempo ,que paso desde el incio de programa
+	int delta = time1 -timebase;// delta time
+	timebase = time1;
+	anim += delta;//duracion de la animacion entre dos cambios de Sprite
+	
+	if (anim / 1000.0 > 0.15)// si el tiempo de animacion dura mas 0.15s cambiamos de sprite
+	{
+		i++;
+		anim = 0.0;
+	}
+	
+	
+
+	
+	this->checkItemCollision();
 	/// Score
 	glPushMatrix();
+	glDisable(GL_TEXTURE_2D);
 	string s = "Score: " + to_string(score);
 	drawBitmapText(s,80,-110.0f,0);
+	glEnable(GL_TEXTURE_2D);
 	glPopMatrix();
+	
+	/// Vidas
+	for(int h = 0; h<this->hp;h++){
+		
+		glPushMatrix();
+			
+			glTranslatef(-110.0f+h*10, -110.0f, 0.0f);
+			draw_health(i);
+		glPopMatrix();
+		
+	}
+	 
+
+	
+
 	
 	/// Jugador
 	glPushMatrix();
@@ -375,4 +467,8 @@ bool Player::is_alive(){
 
 float Player::getX(){
 	return location->x;
+}
+
+float Player::getY(){
+	return location->y;
 }

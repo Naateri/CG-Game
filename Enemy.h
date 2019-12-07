@@ -14,15 +14,19 @@
 #define PLAYER_COLLISION 10.0f
 #define ENEMY_1_SPEED 1.0f
 #define ENEMY_2_SPEED 1.0f
+#define ENEMY_3_SPEED 1.0f
 
 #define ENEMY_1_HP 3.0f
 #define ENEMY_2_HP 6.0f
+#define ENEMY_3_HP 3.0f
 
 #define ENEMY_1_DECREMENT 1.0f
 #define ENEMY_2_DECREMENT 1.0f
+#define ENEMY_3_DECREMENT 1.0f
 
 #define ENEMY_1_SCORE 5
 #define ENEMY_2_SCORE 10
+#define ENEMY_3_SCORE 15
 
 class Player;
 
@@ -98,10 +102,21 @@ public:
 
 
 class Enemy3: public Enemy{
-	
+	void draw_bullets();
+	float speed = ENEMY_3_SPEED;
+	float hp = ENEMY_3_HP;
+	Player* cplayer;
+	GLfloat rotation = 0.0;
+	GLfloat rotationSpeed = 5.0;
+	bool rotate;
 public:
+	Enemy3(Player *cplayer);
 	void shoot();
 	void draw();
+	void move();
+	float get_hp();
+	void decrement_hp();
+	float iscore();
 };
 
 

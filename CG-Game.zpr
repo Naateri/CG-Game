@@ -26,7 +26,7 @@ path=Controller.cpp
 cursor=1:0
 [source]
 path=Player.cpp
-cursor=274:20
+cursor=275:17
 open=true
 [source]
 path=Enemy1.cpp
