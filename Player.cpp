@@ -3,12 +3,21 @@
 std::vector<Enemy*> enemies;
 std::vector<Item *> items;
 
+GLint health1[9];
+GLint blue[7];
+GLint red[7];
+GLint green[7];
+GLint yellow[7];
+
+
 Player::Player(PS3Controller* PS3){
 	this->Joystick = PS3;
 	this->score = 0;
 	location = new Point2D(0.0f, 0.0f);
 	this->hp = 5; //health points
 	this->begin = std::chrono::steady_clock::now();
+
+
 }
 
 void Player::add_hp(){
@@ -38,7 +47,7 @@ void Player::move(){
 		if(Joystick->isButton){
 			val = Joystick->value; 
 			num = control.first;
-			cout<<"VALOR"<<val<<"   NUM "<<num<<endl;
+			
 			if (num == 0){
 				shoot();
 			}else if(num == 5){
@@ -49,13 +58,13 @@ void Player::move(){
 				
 				
 			} else if (num == 1 ){
-				//cout<<"Algo"<<endl;
+			
 				delete Joystick;
 				end = true;
 				exit(0);
 			}
 			else if(num == -1){
-				cout<<"gg"<<endl;
+			
 			}
 			
 		
@@ -64,15 +73,15 @@ void Player::move(){
 		}
 		else{
 		
-		
-			cout<<"Controles: "<<control.first<<"   "<<control.second<<endl;
+	
+		//	cout<<"Controles: "<<control.first<<"   "<<control.second<<endl;
 		
 			//this->location->x += control.first * DIFFERENCE;
 			this->location->x += control.first * DIFFERENCE;
 			//this->location->y -= control.second * DIFFERENCE;
 			this->location->y -= control.second * DIFFERENCE;
-			cout<<"X esta en :"<<this->location->x<<endl;
-			cout<<"Y esta en :"<<this->location->y<<endl;
+			//cout<<"X esta en :"<<this->location->x<<endl;
+			//cout<<"Y esta en :"<<this->location->y<<endl;
 			
 			
 			if(location->y > TOP){/// detectar limites de la ventana
@@ -143,7 +152,7 @@ void Player::destroyAllEnemiesAndReset(){
 
 void Player::shoot(){
 	if(this->power == 0){
-		Bullet* bala = new Bullet(location->x+17,location->y);
+		Bullet* bala = new Bullet(location->x,location->y);
 		bullets.push_back(bala);
 	}else if(this->power == 1){
 		Bullet* bala1 = new Bullet(location->x+13,location->y);
@@ -227,6 +236,7 @@ void Player::draw_bullets(){
 					
 					case 2:{
 						std::cout << "Drop Item 2" << std::endl;
+						
 						DoubleBulletItem *power = new DoubleBulletItem(temp->location->x,temp->location->y);
 						items.push_back(power);
 						break;
@@ -285,13 +295,48 @@ void Player::draw_bullets(){
 	
 }
 
+
+
 void Player::loadTexture(){
+
+	
 	for(int i=1;i<9;++i){
 		string name = "Health/frame-" + to_string(i) + ".png";
 		cout<<name<<endl;
 		char const* name1 = name.c_str();
-		sprites[i] = TextureManager::Inst()->LoadTexture(name1, GL_BGRA_EXT, GL_RGBA);
+		salud[i] = TextureManager::Inst()->LoadTexture(name1, GL_BGRA_EXT, GL_RGBA);
+		health1[i] = TextureManager::Inst()->LoadTexture(name1, GL_BGRA_EXT, GL_RGBA);
+	}
+	
+	/// Texture player
+	string tp = "texture_player.png";
+	cout<<tp<<endl;
+	char const* texture1 = tp.c_str();
+	texture_player = TextureManager::Inst()->LoadTexture(texture1, GL_BGRA_EXT, GL_RGBA);
+	
+	/// End Texture player
+	
+	for(int i=1;i<7;++i){
+		string r = "Red/frame-" + to_string(i) + ".png";
+		cout<<r<<endl;
+		char const* red1 = r.c_str();
+		red[i] = TextureManager::Inst()->LoadTexture(red1 , GL_BGRA_EXT, GL_RGBA);
 		
+
+		string g = "Green/frame-" + to_string(i) + ".png";
+		//cout<<g<<endl;
+		char const* green1 = g.c_str();
+		green[i] = TextureManager::Inst()->LoadTexture(green1 , GL_BGRA_EXT, GL_RGBA);
+		
+		string ye = "Yellow/frame-" + to_string(i) + ".png";
+		cout<<ye<<endl;
+		char const* yellow1 = ye.c_str();
+		yellow[i] = TextureManager::Inst()->LoadTexture(yellow1 , GL_BGRA_EXT, GL_RGBA);
+		
+		string b = "Blue/frame-" + to_string(i) + ".png";
+		cout<<b<<endl;
+		char const* blue1 = b.c_str();
+		blue[i] = TextureManager::Inst()->LoadTexture(blue1, GL_BGRA_EXT, GL_RGBA);
 	}
 	
 }
@@ -344,13 +389,13 @@ void Player::draw_health(int i){
 		i+=1;
 	}
 
-	cout<<"I " <<i<<endl;
+	//cout<<"I " <<i<<endl;
 	float h = 494/410*4;
 	float w = 443/410*4;
 	
 	glPushMatrix();
 	
-	glBindTexture(GL_TEXTURE_2D, sprites[i]);
+	glBindTexture(GL_TEXTURE_2D, salud[i]);
 	glBegin(GL_QUADS);
 	glColor3f(1.0,1.0,1.0);
 	glTexCoord2f(1,0);//coordenadas de textura
@@ -369,15 +414,16 @@ void Player::draw_health(int i){
 }
 
 
-void Player::draw_player(int i){
-	cout<<"I " <<i<<endl;
-	float h = 494/410*4;
-	float w = 443/410*4;
+void Player::draw_player(){
+	float h = 9;
+	float w = 10;
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, sprites[i]);
+	glBindTexture(GL_TEXTURE_2D, texture_player);
 	glBegin(GL_QUADS);
 	glColor3f(1.0,1.0,1.0);
+
 	glTexCoord2f(1,0);//coordenadas de textura
+
 	glVertex3d(-w, -h, 0);
 	
 	glTexCoord2f(1,1);
@@ -438,8 +484,12 @@ void Player::draw(){
 	/// Jugador
 	glPushMatrix();
 	glColor3d(255, 0, 255);
+	
 	glTranslatef(location->x, location->y, 0.0f);
-	glutSolidTeapot(10);
+	glRotatef(25, 0.0f, 1.0f, 0.0f);
+	glTranslatef(0.0f, 0.0f, 0.0f);
+	draw_player();
+	//glutSolidTeapot(10);
 	glPopMatrix();
 	
 	///Bomba

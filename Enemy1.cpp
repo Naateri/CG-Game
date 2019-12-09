@@ -1,12 +1,13 @@
 #include "Enemy.h"
 
-Enemy1::Enemy1(Player* p){
+Enemy1::Enemy1(Player* p,GLint texture){
 	location = new Point2D(100.0f, 100.0f);
 	srand(time(NULL));
 	this->drop_item = rand() % 6;
 	this->shoot_idle_time = 1.0f;
 	this->move_idle_time = 1.5f;
 	this->player = p;
+	this->texture1 = texture;
 }
 
 void Enemy1::shoot(){
@@ -44,6 +45,30 @@ void Enemy1::draw_bullets(){
 	}
 }
 
+void Enemy1::drawEnemy(){
+	float h = 9;
+	float w = 10;
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture1);
+	glBegin(GL_QUADS);
+	glColor3f(1.0,1.0,1.0);
+	glTexCoord2f(1,0);//coordenadas de textura
+	glVertex3d(-w, -h, 0);
+	
+	glTexCoord2f(1,1);
+	glVertex3d(-w, h, 0);
+	
+	glTexCoord2f(0,1);
+	glVertex3d(w, h, 0);
+	
+	glTexCoord2f(0,0);
+	glVertex3d(w, -h, 0);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
+
 void Enemy1::draw(){
 	if (alive){
 		if (!shot){
@@ -63,7 +88,7 @@ void Enemy1::draw(){
 		glPushMatrix();
 			glColor3d(255, 0, 0);
 			glTranslatef(location->x, location->y, 0.0f);
-			glutSolidTeapot(5);
+			drawEnemy();
 		glPopMatrix();
 	}
 	draw_bullets();

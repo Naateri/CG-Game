@@ -1,12 +1,13 @@
 #include "Enemy.h"
 
 
-Enemy3::Enemy3(Player *cplayer) {
+Enemy3::Enemy3(Player *cplayer,GLint texture) {
 	location = new Point2D(100.0f, 100.0f);
 	this->shoot_idle_time = 1.0f;
 	this->move_idle_time = 1.5f;
 	this->cplayer = cplayer;
 	this->rotate = false;
+	this->texture3 = texture; 
 }
 
 void Enemy3::shoot(){
@@ -66,6 +67,29 @@ void Enemy3::draw_bullets(){
 	}
 }
 
+void Enemy3::drawEnemy(){
+	float h = 9;
+	float w = 10;
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture3);
+	glBegin(GL_QUADS);
+	glColor3f(1.0,1.0,1.0);
+	glTexCoord2f(1,0);//coordenadas de textura
+	glVertex3d(-w, -h, 0);
+	
+	glTexCoord2f(1,1);
+	glVertex3d(-w, h, 0);
+	
+	glTexCoord2f(0,1);
+	glVertex3d(w, h, 0);
+	
+	glTexCoord2f(0,0);
+	glVertex3d(w, -h, 0);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
 void Enemy3::draw(){
 	if (alive){
 		if (!shot){
@@ -86,7 +110,8 @@ void Enemy3::draw(){
 			glPushMatrix();
 			glColor3d(255, 255, 240);
 			glTranslatef(location->x, location->y, 0.0f);
-			glutSolidTeapot(5);
+			drawEnemy();
+			//glutSolidTeapot(5);
 			glPopMatrix();
 		}else{
 			this->location->x = 55 * cos(this->rotation+=this->rotationSpeed) + cplayer->location->x;
@@ -94,7 +119,8 @@ void Enemy3::draw(){
 			glPushMatrix();
 			glColor3d(255, 255, 240);
 			glTranslatef(location->x, location->y, 0.0f);
-			glutSolidTeapot(5);
+			drawEnemy();
+			//glutSolidTeapot(5);
 			glPopMatrix();
 		}
 		

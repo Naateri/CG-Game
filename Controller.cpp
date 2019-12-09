@@ -60,7 +60,7 @@ void PS3Controller::init(){
 pair<float,float> PS3Controller::controls(){
 	pair<float,float> res;
 	if(this->isButton){
-		cout<<"VALUE:"<<value<<"PLS"<<endl;
+	//	cout<<"VALUE:"<<value<<"PLS"<<endl;
 		
 		if(joy_button[num_button] && value == 1){
 			

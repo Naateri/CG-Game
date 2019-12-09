@@ -52,13 +52,16 @@ public:
 	
 	///Texturas
 	void draw_health(int i);
-	void draw_player(int i);
+	void itemTextures();
+	void draw_player();
 	void loadTexture();
 	int time1 = 0;
 	int timebase = 0;
 	int anim = 0;
 	int i=0;
-	GLint sprites[8];
+	GLint salud[9];
+
+	GLint texture_player;
 	
 };
 

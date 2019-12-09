@@ -52,6 +52,7 @@ protected:
 	
 public:
 	
+	virtual void drawEnemy() = 0;
 	std::vector<Bullet*> bullets;
 	Point2D* location;
 	int drop_item;
@@ -73,7 +74,10 @@ private:
 	float hp = ENEMY_1_HP;
 	
 public:
-	Enemy1(Player*);
+	GLint texture1;
+	
+	Enemy1(Player*, GLint texture);
+	void drawEnemy();
 	void shoot();
 	void draw();
 	void move();
@@ -91,7 +95,10 @@ private:
 	float hp = ENEMY_2_HP;
 	Player* cplayer;
 public:
-	Enemy2(Player* cplayer);
+	GLint texture2;
+	
+	Enemy2(Player* cplayer,GLint texture);
+	void drawEnemy();
 	void shoot();
 	void draw();
 	void move();
@@ -110,7 +117,10 @@ class Enemy3: public Enemy{
 	GLfloat rotationSpeed = 5.0;
 	bool rotate;
 public:
-	Enemy3(Player *cplayer);
+	GLint texture3;
+	
+	Enemy3(Player *cplayer,GLint texture);
+	void drawEnemy();
 	void shoot();
 	void draw();
 	void move();

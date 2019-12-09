@@ -25,3 +25,6 @@ public:
 };
 
 #endif
+
+
+extern GLint meteor_texture;

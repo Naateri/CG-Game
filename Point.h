@@ -9,12 +9,13 @@ struct Point2D{
 	Point2D(float x, float y){
 		this->x = x; this->y = y;
 	}
-	void draw(){
+	
+		/*void draw(){
 		glPointSize(10);
 		glBegin(GL_POINTS);
 		glVertex2f(x,y);
 		glEnd();
-	}
+	}*/
 	double distance(Point2D* b){
 		return sqrt( pow(this->x - b->x, 2) + pow(this->y - b->y, 2) );
 	}

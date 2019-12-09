@@ -43,7 +43,6 @@ Enemy* enemy3;
 
 std::chrono::steady_clock::time_point begin_meteor;
 std::chrono::steady_clock::time_point end_meteor; //add meteors idle time
-
 std::chrono::steady_clock::time_point begin_eg; //end of game
 
 bool player1 = false;
@@ -57,13 +56,21 @@ int timebase=0;
 ////END SAME FRAMERATE///
 
 int a = 0;
-
+bool r = false;
 std::vector<Meteor*> meteors;
 
+float rotate_background = 0.0f;
 
 /// Texturas
+GLint texture_enemy1;
+GLint texture_enemy2;
+GLint texture_enemy3; 
+GLint background_texture; 
+GLint meteor_texture;
 
 
+/// Background
+int pos_z_background = -10;
 
 
 void displayGizmo(){
@@ -71,9 +78,64 @@ void displayGizmo(){
 	glEnable(GL_PROGRAM_POINT_SIZE);
 	glEnd();
 }
-bool r = false;
+	
+
+void load_textures(){
+	/// Texture enemies
+	string te1 = "texture_enemy1.png";
+	char const* texture1 = te1.c_str();
+	texture_enemy1 = TextureManager::Inst()->LoadTexture(texture1, GL_BGRA_EXT, GL_RGBA);
+	
+	string te2 = "texture_enemy2.png";
+	char const* texture2 = te2.c_str();
+	texture_enemy2 = TextureManager::Inst()->LoadTexture(texture2, GL_BGRA_EXT, GL_RGBA);
+	
+	string te3 = "texture_enemy3.png";
+	char const* texture3 = te3.c_str();
+	texture_enemy3 = TextureManager::Inst()->LoadTexture(texture3, GL_BGRA_EXT, GL_RGBA);
+	
+	string bt = "b8.png";
+	char const* background = bt.c_str();
+	background_texture = TextureManager::Inst()->LoadTexture(background, GL_BGRA_EXT, GL_RGBA);
+	//background_texture = TextureManager::Inst()->LoadTexture(background, GL_BGR_EXT, GL_RGB);
+	
+	string m = "meteor.png";
+	char const* met = m.c_str();
+	meteor_texture = TextureManager::Inst()->LoadTexture(met, GL_BGRA_EXT, GL_RGBA);
+	
+}
+	
+	
+void drawBackground(){
+	float h = 130;
+	float w = 130;
+	float z = pos_z_background;
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, background_texture);
+	glBegin(GL_QUADS);
+glColor3f(1.0,0.0,1.0);
+	
+	glTexCoord2f(0,0);
+	glVertex3d(w, -h, z);
+	
+	glTexCoord2f(1,0);//coordenadas de textura
+	glVertex3d(-w, -h, z);
+	
+	glTexCoord2f(1,1);
+	glVertex3d(-w, h, z);
+	
+	glTexCoord2f(0,1);
+	glVertex3d(w, h, z);
+	
+	
+	glEnd();
+	glDisable(GL_TEXTURE_2D);	
+}
+	
 
 void add_enemies(){
+	
 	if (enemies.size() >= MAX_ENEMIES) return;
 	
 	if (!added_enemies){
@@ -91,18 +153,18 @@ void add_enemies(){
 		int r = (rand() % TYPE_ENEMIES) + 1;
 		switch(r){
 			case 1 :{
-				enemy1 = new Enemy1(p1);
+				enemy1 = new Enemy1(p1,texture_enemy1);
 				enemies.push_back(enemy1);
 				break;
 			}
 			case 2 :{
-				enemy2 = new Enemy2(p1);
+				enemy2 = new Enemy2(p1,texture_enemy2);
 				enemies.push_back(enemy2);
 				break;
 			}
 				
 			case 3 :{ 
-				enemy3 = new Enemy3(p1);
+				enemy3 = new Enemy3(p1,texture_enemy3);
 				enemies.push_back(enemy3);
 				break;
 			}
@@ -164,34 +226,50 @@ void idle(){ // AGREGAR ESTA FUNCION
 //funcion llamada a cada imagen
 void glPaint(void) {
 
-	//El fondo de la escena al color initial
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//funcion de transparencia
 	glEnable(GL_BLEND);//utilizar transparencia
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//funcion de transparencia
+	
 	//glEnable(GL_TEXTURE_2D);
 	glLoadIdentity();
+	gluPerspective(45.0, 1.0, 1.0, 500.0);
+	glTranslatef(0, 0, -300.0);
+	
+	glPushMatrix();
+
+	rotate_background += 0.1;
+	glEnable(GL_TEXTURE_2D);
+	GLUquadricObj *quadricObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadricObj, GLU_FILL);
+	glBindTexture(GL_TEXTURE_2D, background_texture);
+	
+	gluQuadricTexture(quadricObj, GL_TRUE);
+	gluQuadricNormals(quadricObj, GLU_SMOOTH);
+	glColor3f(1.0,0.0,1.0);
+	glTranslatef(0,0,-315);
+	glRotatef(rotate_background,1,0,0);
+	glRotatef(90,0,0,1.0);
+	gluSphere(quadricObj,310,30,30);
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
+/*	
+	
+	//El fondo de la escena al color initial
+
 
 	//glOrtho(-300.0f,  300.0f,-300.0f, 300.0f, -1.0f, 1.0f);
 	
-	gluPerspective(45.0, 1.0, 1.0, 500.0);
-	glTranslatef(0, 0, -300.0);
-/*
 	
-	glPolygonMode(GL_FRONT, GL_LINE);
-	glPolygonMode (GL_BACK, GL_LINE);
-	
-	
-	glPushMatrix();
-	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-	
-	glPopMatrix();
-	*/
+*/
 	time_execution = glutGet(GLUT_ELAPSED_TIME); // recupera el tiempo ,que paso desde el incio de programa
 	float dt = float(time_execution -timebase)/1000.0;// delta time
 	timebase = time_execution;
 	
 	add_enemies();
 	add_meteorite();
+	
+	//drawBackground();
+	
 	
 	a += 10 * dt;
 	if (!player1){
@@ -213,8 +291,6 @@ void glPaint(void) {
 	for(int i = 0; i< items.size();i++){
 		items[i]->move();
 		items[i]->draw();
-		
-		
 	}
 	for(int i = 0; i < meteors.size(); i++){
 		meteors[i]->move();
@@ -313,7 +389,7 @@ int main(int argc, char** argv) {
 
 	
 	initGL(); //funcion de inicializacion de OpenGL
-
+	load_textures();
 	p1->loadTexture();
 
 	
