@@ -155,6 +155,7 @@ void Player::shoot(){
 		bullets.push_back(bala1);
 		bullets.push_back(bala2);
 	}
+	system("canberra-gtk-play -f sounds/sfx_laser1.ogg .&");
 }
 
 

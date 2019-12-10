@@ -115,7 +115,7 @@ class Enemy3: public Enemy{
 	float hp = ENEMY_3_HP;
 	Player* cplayer;
 	GLfloat rotation = 0.0;
-	GLfloat rotationSpeed = 2.0;
+	GLfloat rotationSpeed = 0.01;
 	bool rotate;
 public:
 	GLint texture3;
