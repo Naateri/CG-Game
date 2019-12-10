@@ -83,7 +83,7 @@ public:
 	void move();
 	float get_hp();
 	void decrement_hp();
-
+	float rotation = 0.0f;
 	float iscore();
 };
 
@@ -105,6 +105,7 @@ public:
 	float get_hp();
 	void decrement_hp();
 	float iscore();
+	float rotation = 0.0f;
 };
 
 
@@ -114,7 +115,7 @@ class Enemy3: public Enemy{
 	float hp = ENEMY_3_HP;
 	Player* cplayer;
 	GLfloat rotation = 0.0;
-	GLfloat rotationSpeed = 5.0;
+	GLfloat rotationSpeed = 2.0;
 	bool rotate;
 public:
 	GLint texture3;
@@ -127,8 +128,8 @@ public:
 	float get_hp();
 	void decrement_hp();
 	float iscore();
+	//float rotation = 0.0f;
 };
-
 
 
 

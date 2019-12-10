@@ -67,7 +67,7 @@ GLint texture_enemy2;
 GLint texture_enemy3; 
 GLint background_texture; 
 GLint meteor_texture;
-
+GLint enemy_bullets;
 
 /// Background
 int pos_z_background = -10;
@@ -82,6 +82,7 @@ void displayGizmo(){
 
 void load_textures(){
 	/// Texture enemies
+	string tex1 ;
 	string te1 = "texture_enemy1.png";
 	char const* texture1 = te1.c_str();
 	texture_enemy1 = TextureManager::Inst()->LoadTexture(texture1, GL_BGRA_EXT, GL_RGBA);
@@ -99,40 +100,13 @@ void load_textures(){
 	background_texture = TextureManager::Inst()->LoadTexture(background, GL_BGRA_EXT, GL_RGBA);
 	//background_texture = TextureManager::Inst()->LoadTexture(background, GL_BGR_EXT, GL_RGB);
 	
-	string m = "meteor.png";
+	string m = "meteor2.jpg";
 	char const* met = m.c_str();
-	meteor_texture = TextureManager::Inst()->LoadTexture(met, GL_BGRA_EXT, GL_RGBA);
+	meteor_texture = TextureManager::Inst()->LoadTexture(met, GL_BGR_EXT, GL_RGB);
 	
+
 }
-	
-	
-void drawBackground(){
-	float h = 130;
-	float w = 130;
-	float z = pos_z_background;
-	
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, background_texture);
-	glBegin(GL_QUADS);
-glColor3f(1.0,0.0,1.0);
-	
-	glTexCoord2f(0,0);
-	glVertex3d(w, -h, z);
-	
-	glTexCoord2f(1,0);//coordenadas de textura
-	glVertex3d(-w, -h, z);
-	
-	glTexCoord2f(1,1);
-	glVertex3d(-w, h, z);
-	
-	glTexCoord2f(0,1);
-	glVertex3d(w, h, z);
-	
-	
-	glEnd();
-	glDisable(GL_TEXTURE_2D);	
-}
-	
+
 
 void add_enemies(){
 	
@@ -235,32 +209,24 @@ void glPaint(void) {
 	gluPerspective(45.0, 1.0, 1.0, 500.0);
 	glTranslatef(0, 0, -300.0);
 	
+	/// Background
 	glPushMatrix();
-
-	rotate_background += 0.1;
-	glEnable(GL_TEXTURE_2D);
-	GLUquadricObj *quadricObj = gluNewQuadric();
-	gluQuadricDrawStyle(quadricObj, GLU_FILL);
-	glBindTexture(GL_TEXTURE_2D, background_texture);
-	
-	gluQuadricTexture(quadricObj, GL_TRUE);
-	gluQuadricNormals(quadricObj, GLU_SMOOTH);
-	glColor3f(1.0,0.0,1.0);
-	glTranslatef(0,0,-315);
-	glRotatef(rotate_background,1,0,0);
-	glRotatef(90,0,0,1.0);
-	gluSphere(quadricObj,310,30,30);
-	glDisable(GL_TEXTURE_2D);
+		rotate_background += 0.1;
+		glEnable(GL_TEXTURE_2D);
+		GLUquadricObj *quadricObj = gluNewQuadric();
+		gluQuadricDrawStyle(quadricObj, GLU_FILL);
+		glBindTexture(GL_TEXTURE_2D, background_texture);
+		
+		gluQuadricTexture(quadricObj, GL_TRUE);
+		gluQuadricNormals(quadricObj, GLU_SMOOTH);
+		glColor3d(255,0,255);
+		glTranslatef(0,0,-385);
+		glRotatef(rotate_background,1,0,0);
+		glRotatef(90,0,0,1.0);
+		gluSphere(quadricObj,380,30,30);
+		glDisable(GL_TEXTURE_2D);
 	glPopMatrix();
-/*	
-	
-	//El fondo de la escena al color initial
 
-
-	//glOrtho(-300.0f,  300.0f,-300.0f, 300.0f, -1.0f, 1.0f);
-	
-	
-*/
 	time_execution = glutGet(GLUT_ELAPSED_TIME); // recupera el tiempo ,que paso desde el incio de programa
 	float dt = float(time_execution -timebase)/1000.0;// delta time
 	timebase = time_execution;
@@ -268,8 +234,7 @@ void glPaint(void) {
 	add_enemies();
 	add_meteorite();
 	
-	//drawBackground();
-	
+
 	
 	a += 10 * dt;
 	if (!player1){

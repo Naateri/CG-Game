@@ -22,20 +22,19 @@ void DoubleShotItem::draw_item(int idx){
 	
 	glBindTexture(GL_TEXTURE_2D, yellow[idx]);
 	glBegin(GL_QUADS);
-	
-	glColor3f(1.0,1.0,1.0);
-	
-	glTexCoord2f(1,0);//coordenadas de textura
-	glVertex3d(-w, -h, 0);
-	
-	glTexCoord2f(1,1);
-	glVertex3d(-w, h, 0);
-	
-	glTexCoord2f(0,1);
-	glVertex3d(w, h, 0);
-	
-	glTexCoord2f(0,0);
-	glVertex3d(w, -h, 0);
+		glColor3f(1.0,1.0,1.0);
+		
+		glTexCoord2f(1,0);//coordenadas de textura
+		glVertex3d(-w, -h, 0);
+		
+		glTexCoord2f(1,1);
+		glVertex3d(-w, h, 0);
+		
+		glTexCoord2f(0,1);
+		glVertex3d(w, h, 0);
+		
+		glTexCoord2f(0,0);
+		glVertex3d(w, -h, 0);
 	glEnd();
 	
 	glDisable(GL_TEXTURE_2D);
@@ -55,7 +54,7 @@ void DoubleShotItem::draw(){
 	
 	
 	if(this->active){
-		//std::cout<<location->y<<std::endl;
+		
 		glPushMatrix();
 			glTranslatef(location->x, location->y, 0.0f);
 			

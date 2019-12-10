@@ -24,19 +24,19 @@ void SuperBombItem::draw_item(int idx){
 	glBindTexture(GL_TEXTURE_2D, blue[idx]);
 	
 	glBegin(GL_QUADS);
-	glColor3f(1.0,1.0,1.0);
-	
-	glTexCoord2f(1,0);
-	glVertex3d(-w, -h, 0);
-	
-	glTexCoord2f(1,1);
-	glVertex3d(-w, h, 0);
-	
-	glTexCoord2f(0,1);
-	glVertex3d(w, h, 0);
-	
-	glTexCoord2f(0,0);
-	glVertex3d(w, -h, 0);
+		glColor3f(1.0,1.0,1.0);
+		
+		glTexCoord2f(1,0);
+		glVertex3d(-w, -h, 0);
+		
+		glTexCoord2f(1,1);
+		glVertex3d(-w, h, 0);
+		
+		glTexCoord2f(0,1);
+		glVertex3d(w, h, 0);
+		
+		glTexCoord2f(0,0);
+		glVertex3d(w, -h, 0);
 	
 	glEnd();
 	
@@ -59,12 +59,9 @@ void SuperBombItem::draw(){
 	}
 	
 	if(this->active){
-		//std::cout<<location->y<<std::endl;
 		glPushMatrix();
-		//glColor3d(0, 255, 255);
-		glTranslatef(location->x, location->y, 0.0f);
-		draw_item(i);
-		//glutSolidCube(3);
+			glTranslatef(location->x, location->y, 0.0f);
+			draw_item(i);
 		glPopMatrix();
 	}
 }

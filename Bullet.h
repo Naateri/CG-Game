@@ -20,10 +20,10 @@ public:
 		this->location->y = 0;
 	}
 		
-		Bullet(float px, float py){
-			//this->damage = 0;
-			location = new Point2D(px, py);
-		}
+	Bullet(float px, float py){
+		//this->damage = 0;
+		location = new Point2D(px, py);
+	}
 };
 
 //extern std::vector<Bullet*> bullets;

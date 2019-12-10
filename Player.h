@@ -50,6 +50,8 @@ public:
 	float getY();
 	int score = 0;
 	
+	bool left, right;
+	
 	///Texturas
 	void draw_health(int i);
 	void itemTextures();
@@ -60,12 +62,16 @@ public:
 	int anim = 0;
 	int i=0;
 	GLint salud[9];
-
+	GLint numbers[10];
 	GLint texture_player;
-	
+	GLint fire;
+	void drawScore(string s,float x,float y,float z);
+	void bullet_texture(float tam, int type);
 };
 
 extern std::vector<Enemy*> enemies;
 extern std::vector<Item*> items;
+extern GLint enemy_bullets;
+extern GLint enemy_bullets2;
 
 #endif

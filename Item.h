@@ -12,11 +12,12 @@
 #define HEALTH_ITEM_SPEED 1.5f
 using namespace std;
 /**
-Id 1 disparo doble Color amarillo
-Id 2 doble bala Color Verde
-Id 3 combiancion del 1 y 2 Color Azul
-Id 4 vidas max 3 vidas
-Id 5 bomba
+Id 1 disparo doble , item: amarillo
+Id 2 doble bala , item: verde
+Id 3 combiancion del 1 y 2 , item: rojo
+
+Id 4 vidas , item : corazon
+Id 5 bomba , item: azul
 
 
 **/

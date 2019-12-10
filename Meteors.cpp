@@ -23,39 +23,23 @@ void Meteor::move(){
 
 void draw_meteor(){
 	glEnable(GL_TEXTURE_2D);
-	
+	GLUquadricObj *quadricObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadricObj, GLU_FILL);
 	glBindTexture(GL_TEXTURE_2D, meteor_texture);
-	
-	int w = 12;
-	int h = 10;
-	
-	glBegin(GL_QUADS);
-	glColor3f(1.0,1.0,1.0);
-	
-	glTexCoord2f(1,0);
-	glVertex3d(-w, -h, 0);
-	
-	glTexCoord2f(1,1);
-	glVertex3d(-w, h, 0);
-	
-	glTexCoord2f(0,1);
-	glVertex3d(w, h, 0);
-	
-	glTexCoord2f(0,0);
-	glVertex3d(w, -h, 0);
-	
-	glEnd();
-	
+	glColor3d(71,75,78);
+	gluQuadricTexture(quadricObj, GL_TRUE);
+	gluQuadricNormals(quadricObj, GLU_SMOOTH);
+	glRotatef(90, 0.0f, 1.0f, 0.0f);
+	gluSphere(quadricObj,15,30,30);
 	glDisable(GL_TEXTURE_2D);
+
 }
 void Meteor::draw(){
 	glPushMatrix();
-		//glColor3d(0, 1, 1);
 		glTranslatef(position->x, position->y, 0.0f);
 		glRotatef(rotation, 0.0f, 0.0f, 1.0f);
 		glTranslatef(0.0f, 0.0f, 0.0f);
 		draw_meteor();
-		//glutSolidSphere(4.0f, 20, 20);
 	glPopMatrix();
 	rotation += ROTATION_SPEED;	
 }

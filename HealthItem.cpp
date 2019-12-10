@@ -19,7 +19,7 @@ void HealthItem::draw_item(int idx){
 	float h = 6;
 	float w = 6;
 	
-	glPushMatrix();
+	
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, health1[idx]);
 	glBegin(GL_QUADS);

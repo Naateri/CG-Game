@@ -1,5 +1,7 @@
 #include "Enemy.h"
 
+//GLint enemy_bullets;
+
 Enemy1::Enemy1(Player* p,GLint texture){
 	location = new Point2D(100.0f, 100.0f);
 	srand(time(NULL));
@@ -18,15 +20,30 @@ void Enemy1::shoot(){
 void Enemy1::draw_bullets(){
 	Bullet* bl;
 	bool hit_enemy;
+	rotation += 8.0f;
 	for(int i=0;i<bullets.size();++i){
 		hit_enemy = false;
 		glPushMatrix();
+			glEnable(GL_TEXTURE_2D);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 			bullets[i]->location->y -= 3;
-			glPointSize(8);
-			glBegin(GL_POINTS);
-			glColor3d(255, 0, 0);
-			glVertex3f(bullets[i]->location->x,bullets[i]->location->y,0);
-		glEnd();
+			
+			glTranslatef(bullets[i]->location->x,bullets[i]->location->y,0);
+			glRotatef(rotation,0,1,0);
+			glTranslatef(0.0f,0.0f,0.0f);
+			glRotatef(90,1,0,0);
+
+			GLUquadricObj *quadratic = gluNewQuadric();
+			gluQuadricDrawStyle(quadratic, GLU_FILL);
+			glBindTexture(GL_TEXTURE_2D, enemy_bullets);
+
+			gluQuadricTexture(quadratic, GL_TRUE);
+			gluCylinder(quadratic,1.5f,1.5f,8,32,32);
+
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_MODULATE);
+			glDisable(GL_TEXTURE_2D);
+			
+		glPopMatrix();
 		
 		if (!hit_enemy && 
 			bullets[i]->location->distance(player->location) <= PLAYER_COLLISION){
@@ -86,7 +103,6 @@ void Enemy1::draw(){
 		//std::cout << "time: " << time << std::endl;
 	}
 		glPushMatrix();
-			glColor3d(255, 0, 0);
 			glTranslatef(location->x, location->y, 0.0f);
 			drawEnemy();
 		glPopMatrix();

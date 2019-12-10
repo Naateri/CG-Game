@@ -16,27 +16,26 @@ void DoubleShotBulletItem::draw_item(int idx){
 	}
 	
 	
-	
 	float h = 6;
 	float w = 6;
 
 	glEnable(GL_TEXTURE_2D);
 	
-	glBindTexture(GL_TEXTURE_2D, green[idx]);
+	glBindTexture(GL_TEXTURE_2D, red[idx]);
 	glBegin(GL_QUADS);
-	glColor3f(1.0,1.0,1.0);
-	
-	glTexCoord2f(1,0);//coordenadas de textura
-	glVertex3d(-w, -h, 0);
-	
-	glTexCoord2f(1,1);
-	glVertex3d(-w, h, 0);
-	
-	glTexCoord2f(0,1);
-	glVertex3d(w, h, 0);
-	
-	glTexCoord2f(0,0);
-	glVertex3d(w, -h, 0);
+		glColor3f(1.0,1.0,1.0);
+		
+		glTexCoord2f(1,0);//coordenadas de textura
+		glVertex3d(-w, -h, 0);
+		
+		glTexCoord2f(1,1);
+		glVertex3d(-w, h, 0);
+		
+		glTexCoord2f(0,1);
+		glVertex3d(w, h, 0);
+		
+		glTexCoord2f(0,0);
+		glVertex3d(w, -h, 0);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 }

@@ -1,6 +1,5 @@
 #include "Enemy.h"
 
-
 Enemy3::Enemy3(Player *cplayer,GLint texture) {
 	location = new Point2D(100.0f, 100.0f);
 	this->shoot_idle_time = 1.0f;
@@ -31,13 +30,19 @@ void Enemy3::draw_bullets(){
 	bool hit_enemy;
 	for(int i=0;i<bullets.size();++i){
 		hit_enemy = false;
-		
 		glPushMatrix();
-		glPointSize(8);
-		glBegin(GL_POINTS);
-		glColor3d(255, 255,255);
-		glVertex3f(bullets[i]->location->x,bullets[i]->location->y,0);
-		glEnd();
+		
+			glRotatef(90,1,0,0);
+			
+			GLUquadricObj *quadratic = gluNewQuadric();
+			glTranslatef(bullets[i]->location->x,bullets[i]->location->y,0);
+			gluQuadricDrawStyle(quadratic, GLU_FILL);
+			glBindTexture(GL_TEXTURE_2D, enemy_bullets);
+			gluQuadricTexture(quadratic, GL_TRUE);
+			gluQuadricNormals(quadratic, GLU_SMOOTH);
+			gluCylinder(quadratic,1.8f,1.8f,4,32,32);
+		glPopMatrix();
+		
 		bullets[i]->location->y = (bullets[i]->m * (bullets[i]->location->x - cplayer->location->x)) + bullets[i]->n;
 		if(bullets[i]->direction){
 			bullets[i]->location->x -= 0.6;
@@ -46,12 +51,8 @@ void Enemy3::draw_bullets(){
 			bullets[i]->location->x += 0.6;
 		}
 		
-		
-		
-		
-		if (!hit_enemy && 
-			bullets[i]->location->distance(cplayer->location) <= PLAYER_COLLISION){
-			//cplayer->reduce_hp();
+
+		if (!hit_enemy && bullets[i]->location->distance(cplayer->location) <= PLAYER_COLLISION){
 			std::cout << "HP reduced\n";
 			hit_enemy = true;
 		}
@@ -95,7 +96,8 @@ void Enemy3::draw(){
 		if (!shot){
 			this->begin = std::chrono::steady_clock::now();
 			shot = true;
-		} else {
+		} 
+		else {
 			this->end = std::chrono::steady_clock::now();
 			std::chrono::duration<double> elapsed_seconds = this->end - this->begin;
 			double time = elapsed_seconds.count();
@@ -104,23 +106,20 @@ void Enemy3::draw(){
 				this->shot = false;
 				shoot();
 			}
-			//std::cout << "time: " << time << std::endl;
+			
 		}
 		if(!rotate){
 			glPushMatrix();
-			glColor3d(255, 255, 240);
-			glTranslatef(location->x, location->y, 0.0f);
-			drawEnemy();
-			//glutSolidTeapot(5);
+				glTranslatef(location->x, location->y, 0.0f);
+				drawEnemy();
 			glPopMatrix();
-		}else{
+		}
+		else{
 			this->location->x = 55 * cos(this->rotation+=this->rotationSpeed) + cplayer->location->x;
 			this->location->y = 55 * sin(this->rotation+=this->rotationSpeed) + cplayer->location->y;
 			glPushMatrix();
-			glColor3d(255, 255, 240);
-			glTranslatef(location->x, location->y, 0.0f);
-			drawEnemy();
-			//glutSolidTeapot(5);
+				glTranslatef(location->x, location->y, 0.0f);
+				drawEnemy();
 			glPopMatrix();
 		}
 		
@@ -132,11 +131,10 @@ void Enemy3::move(){
 	if(location->distance(cplayer->location) >= 55 ){
 		location->y -= 2;
 		location->x -= 1;
-	}else{
+	}
+	else{
 		rotate = true;
 	}
-	
-	
 }
 
 float Enemy3::get_hp(){
