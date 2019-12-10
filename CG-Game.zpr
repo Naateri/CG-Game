@@ -15,11 +15,11 @@ tab_width=4
 tab_use_spaces=0
 explorer_path=.
 inherits_from=
-current_source=Player.cpp
+current_source=Enemy3.cpp
 path_char=/
 [source]
 path=main.cpp
-cursor=236:0
+cursor=22:21
 open=true
 [source]
 path=Controller.cpp
@@ -27,7 +27,7 @@ cursor=1:0
 open=true
 [source]
 path=Player.cpp
-cursor=166:23
+cursor=114:3
 open=true
 [source]
 path=Enemy1.cpp
@@ -39,7 +39,7 @@ cursor=25:1
 open=true
 [source]
 path=Enemy2.cpp
-cursor=116:17
+cursor=19:17
 open=true
 [source]
 path=SuperBombItem.cpp
@@ -66,7 +66,7 @@ cursor=11:41
 open=true
 [source]
 path=Enemy3.cpp
-cursor=35:3
+cursor=13:0
 open=true
 [source]
 path=TextureManager.cpp

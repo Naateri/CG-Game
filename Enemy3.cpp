@@ -30,7 +30,7 @@ void Enemy3::draw_bullets(){
 	bool hit_enemy;
 	for(int i=0;i<bullets.size();++i){
 		hit_enemy = false;
-		glPushMatrix();
+		/*glPushMatrix();
 		
 			glRotatef(90,1,0,0);
 			
@@ -42,6 +42,42 @@ void Enemy3::draw_bullets(){
 			gluQuadricNormals(quadratic, GLU_SMOOTH);
 			gluCylinder(quadratic,1.8f,1.8f,4,32,32);
 		glPopMatrix();
+		
+		*/
+		
+		
+		glPushMatrix();
+		//bullets[i]->location->y -= 2;
+		
+			glEnable(GL_TEXTURE_2D);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+			
+			
+			glTranslatef(bullets[i]->location->x,bullets[i]->location->y,0);
+			glRotatef(rotation,0,1,0);
+			glTranslatef(0.0f,0.0f,0.0f);
+			glRotatef(90,1,0,0);
+			
+			GLUquadricObj *quadratic = gluNewQuadric();
+			gluQuadricDrawStyle(quadratic, GLU_FILL);
+			glBindTexture(GL_TEXTURE_2D, enemy_bullets2);
+			
+			gluQuadricTexture(quadratic, GL_TRUE);
+			gluQuadricNormals(quadratic, GLU_SMOOTH);
+			gluCylinder(quadratic,1.5f,1.5f,8.0f,32,32);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_MODULATE);
+			glDisable(GL_TEXTURE_2D);
+		
+		glPopMatrix();
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		bullets[i]->location->y = (bullets[i]->m * (bullets[i]->location->x - cplayer->location->x)) + bullets[i]->n;
 		if(bullets[i]->direction){
@@ -117,6 +153,11 @@ void Enemy3::draw(){
 		else{
 			this->location->x = 55 * cos(this->rotation+=this->rotationSpeed) + cplayer->location->x;
 			this->location->y = 55 * sin(this->rotation+=this->rotationSpeed) + cplayer->location->y;
+		
+
+			
+			
+			
 			glPushMatrix();
 				glTranslatef(location->x, location->y, 0.0f);
 				drawEnemy();

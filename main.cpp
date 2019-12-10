@@ -20,7 +20,7 @@
 #define ALPHA 1
 
 #define MAX_TIME 120.0f
-#define MAX_ENEMIES 1
+#define MAX_ENEMIES 5
 #define TYPE_ENEMIES 3
 
 using namespace std;
@@ -337,7 +337,9 @@ GLvoid initGL()
 //
 int main(int argc, char** argv) {
 	
-	Controller1 = new PS3Controller("/dev/input/js2");
+	Controller1 = new PS3Controller("/dev/input/js0");
+	//Controller1 = new PS3Controller("/dev/input/js2");
+	
 	Controller1->open_fd();
 	cout << "Controller opened\n";
 	
