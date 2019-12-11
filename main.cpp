@@ -278,7 +278,6 @@ void glPaint(void) {
 	if (p1->time_passed() >= MAX_TIME || !p1->is_alive()){
 		std::cout << "Game over\n";
 		system("canberra-gtk-play -f sounds/sfx_lose.ogg .&");
-		system("canberra-gtk-play --volume=0 .&");
 		delete p1;
 		exit(0);
 	}

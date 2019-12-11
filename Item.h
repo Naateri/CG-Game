@@ -8,7 +8,7 @@
 #include "TextureManager.h"
 #define DOUBLE_BULLET_ITEM_SPEED 1.5f 
 #define DOUBLE_SHOT_ITEM_SPEED 0.5f 
-#define SUPER_BOMB_SPEED 3.0f
+#define SUPER_BOMB_SPEED 1.5f
 #define HEALTH_ITEM_SPEED 1.5f
 using namespace std;
 /**

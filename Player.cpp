@@ -52,7 +52,7 @@ void Player::move(){
 			
 			if (num == 0){
 				shoot();
-			}else if(num == 5){
+			}else if(num == 2){
 				
 				cout<<"BOMBA"<<endl;
 				
@@ -549,7 +549,7 @@ void Player::draw(){
 		temp = enemies.at(j);
 		if((this->location->distance(temp->location)<=22)){
 			hasBomb=true;
-			
+			system("canberra-gtk-play -f sounds/explosion.ogg .&");
 			this->destroyAllEnemiesAndReset();
 			
 			this->reduce_hp();

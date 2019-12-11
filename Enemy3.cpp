@@ -7,6 +7,7 @@ Enemy3::Enemy3(Player *cplayer,GLint texture) {
 	this->cplayer = cplayer;
 	this->rotate = false;
 	this->texture3 = texture; 
+	this->drop_item = rand() % 6;
 }
 
 void Enemy3::shoot(){
@@ -179,7 +180,7 @@ void Enemy3::move(){
 			this->location->x +=1;
 		}
 		
-		this->location->y -= 1;
+		this->location->y -= 2;
 		//location->y = ((location->x - cplayer->getX())/(location->y-cplayer->getY())) * (-cplayer->getX()+location->x)+cplayer->getY();
 		//location->x -= 1.5;
 	}
