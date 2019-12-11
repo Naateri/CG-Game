@@ -11,8 +11,9 @@ Enemy3::Enemy3(Player *cplayer,GLint texture) {
 
 void Enemy3::shoot(){
 	Bullet* bala = new Bullet(location->x,location->y);
-	bala->m = (this->location->y - cplayer->getY())/(this->location->x - cplayer->getX());
+	bala->m = ((this->location->y - cplayer->getY())/(this->location->x - cplayer->getX()));
 	bala->n = cplayer->getY();
+	bala->xPlayer = cplayer->getX();
 	if(this->location->x == 0 && this->location->y>=0){
 		bala->direction = 1;
 	}else if(this->location->x == 0 && this->location->y<0){
@@ -77,23 +78,24 @@ void Enemy3::draw_bullets(){
 		
 		
 		
+	
+		bullets[i]->location->y = (bullets[i]->m * (bullets[i]->location->x-bullets[i]->xPlayer)) + bullets[i]->n;
 		
-		
-		bullets[i]->location->y = (bullets[i]->m * (bullets[i]->location->x - cplayer->location->x)) + bullets[i]->n;
 		if(bullets[i]->direction){
-			bullets[i]->location->x -= 0.6;
+			bullets[i]->location->x -= 0.5;
 		}
 		else{
-			bullets[i]->location->x += 0.6;
+			bullets[i]->location->x += 0.5;
 		}
 		
 
 		if (!hit_enemy && bullets[i]->location->distance(cplayer->location) <= PLAYER_COLLISION){
 			std::cout << "HP reduced\n";
+			cplayer->reduce_hp();
 			hit_enemy = true;
 		}
 		
-		if (hit_enemy || bullets[i]->location->y <= -300.0f || bullets[i]->location->y >= 300.0f){
+		if (hit_enemy || bullets[i]->location->y <= -300.0f || bullets[i]->location->y >= 300.0f|| bullets[i]->location->x >= 300.0f || bullets[i]->location->x <= -300.0f){
 			bl = bullets[i];
 			bullets.erase(bullets.begin() + i);
 			i--;
@@ -170,8 +172,16 @@ void Enemy3::draw(){
 
 void Enemy3::move(){
 	if(location->distance(cplayer->location) >= 55 ){
-		location->y -= 2;
-		location->x -= 1;
+		if(this->location->x > cplayer->getX()){
+			this->location->x -= 1;
+		}
+		else{
+			this->location->x +=1;
+		}
+		
+		this->location->y -= 1;
+		//location->y = ((location->x - cplayer->getX())/(location->y-cplayer->getY())) * (-cplayer->getX()+location->x)+cplayer->getY();
+		//location->x -= 1.5;
 	}
 	else{
 		rotate = true;

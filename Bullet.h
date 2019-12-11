@@ -11,6 +11,8 @@ public:
 	float rotation = 0.0f;
 	GLfloat m;
 	GLfloat n;
+	GLfloat xPlayer;
+	GLfloat yPlayer;
 	bool direction;
 	
 	Bullet(){

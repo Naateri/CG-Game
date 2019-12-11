@@ -22,10 +22,12 @@ Player::Player(PS3Controller* PS3){
 
 void Player::add_hp(){
 	this->hp++;
+	system("canberra-gtk-play -f sounds/sfx_shieldUp.ogg .&");
 }
 
 void Player::reduce_hp(){
 	this->hp--;
+	system("canberra-gtk-play -f sounds/sfx_shieldDown.ogg .&");
 }
 
 
@@ -128,6 +130,7 @@ void Player::destroyAllEnemiesAndReset(){
 		items.clear();
 		bullets.clear();
 		hasBomb = false;
+		system("canberra-gtk-play -f sounds/sfx_zap.ogg .&");
 	}
 }
 
@@ -274,13 +277,16 @@ void Player::checkItemCollision(){
 			items[i]->active = false;
 			if(items[i]->id == 5){
 				this->hasBomb = true;
+				system("canberra-gtk-play -f sounds/powerup.wav .&");
 			}else if(items[i]->id == 4){
 				if(this->hp<5){
 					this->hp++;
+					system("canberra-gtk-play -f sounds/sfx_shieldUp.ogg .&");
 				}
 				
 			}else{
 				this->power = items[i]->id;
+				system("canberra-gtk-play -f sounds/powerup.wav .&");
 			}
 			
 		}
@@ -374,6 +380,7 @@ void Player::draw_bullets(){
 			temp = enemies.at(j);
 			
 			if (!deleted_bullet && temp->alive && temp->location->distance(bullets[i]->location) <= this->collision){
+				system("canberra-gtk-play -f sounds/explosion.ogg .&");
 				temp->decrement_hp();
 				
 				if(temp->get_hp() <= 0){
@@ -384,6 +391,7 @@ void Player::draw_bullets(){
 					i--;
 					delete bl;
 					deleted_bullet = true;
+					
 					
 					//dropear un Item
 					switch(temp->drop_item){
@@ -535,8 +543,19 @@ void Player::draw(){
 		anim = 0.0;
 	}
 	
-	
-
+	Enemy *temp;
+	int enemies_size = enemies.size();
+	for(int j = 0; j < enemies_size; j++){
+		temp = enemies.at(j);
+		if((this->location->distance(temp->location)<=22)){
+			hasBomb=true;
+			
+			this->destroyAllEnemiesAndReset();
+			
+			this->reduce_hp();
+			break;
+		}
+	}
 	
 	this->checkItemCollision();
 	/// Score

@@ -18,7 +18,7 @@
 
 #define ENEMY_1_HP 3.0f
 #define ENEMY_2_HP 6.0f
-#define ENEMY_3_HP 3.0f
+#define ENEMY_3_HP 2.0f
 
 #define ENEMY_1_DECREMENT 1.0f
 #define ENEMY_2_DECREMENT 1.0f

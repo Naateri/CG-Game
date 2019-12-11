@@ -20,7 +20,7 @@
 #define ALPHA 1
 
 #define MAX_TIME 120.0f
-#define MAX_ENEMIES 5
+#define MAX_ENEMIES 2
 #define TYPE_ENEMIES 3
 
 using namespace std;
@@ -161,7 +161,7 @@ void add_meteorite(){
 	std::chrono::duration<double> elapsed_seconds = end_meteor - begin_meteor;
 	double time = elapsed_seconds.count();
 	
-	if (time >= 5.0f){
+	if (time >= 10.0f){
 		cout << "Meteorite spawning\n";
 		meteor = new Meteor(p1);
 		meteors.push_back(meteor);
@@ -277,6 +277,8 @@ void glPaint(void) {
 	
 	if (p1->time_passed() >= MAX_TIME || !p1->is_alive()){
 		std::cout << "Game over\n";
+		system("canberra-gtk-play -f sounds/sfx_lose.ogg .&");
+		system("canberra-gtk-play --volume=0 .&");
 		delete p1;
 		exit(0);
 	}
@@ -337,14 +339,14 @@ GLvoid initGL()
 //
 int main(int argc, char** argv) {
 	
-	Controller1 = new PS3Controller("/dev/input/js0");
+	Controller1 = new PS3Controller("/dev/input/js2");
 	//Controller1 = new PS3Controller("/dev/input/js2");
 	
 	Controller1->open_fd();
 	cout << "Controller opened\n";
 	
 	p1 = new Player(Controller1);
-	
+	system("canberra-gtk-play --loop=200 -f sounds/backSound.ogg .&");
 	//Inicializacion de la GLUT
 	glutInit(&argc, argv);
 	
